@@ -12,17 +12,13 @@ Complete source code is provided under
 
 ## How to build and run jolt-jni-droid from source
 
-### Sample applications
-
 1. Install [Android Studio][studio],
    version 2024.3.1 or higher,
    if you don't already have it.
 2. Download and extract the jolt-jni-droid source code from GitHub:
-  + using [Git]:
-    + `git clone https://github.com/stephengold/jolt-jni-droid.git`
-    + `cd jolt-jni-droid`
+  + using [Git]: `git clone https://github.com/stephengold/jolt-jni-droid.git`
 3. Run Android Studio and open the extracted project.
-4. Press Shift-F10.
+4. Press Shift+F10 .
 
 
 [git]: https://git-scm.com "Git version-control system"
