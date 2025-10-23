@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">jolt-jni-droid</string>
+    <string name="action_settings">Settings</string>
+    <string name="main_fragment_label">Hello Jolt JNI</string>
+</resources>
