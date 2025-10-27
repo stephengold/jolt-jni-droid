@@ -10,6 +10,7 @@ on:
 
 jobs:
   Java17-x-Android:
+    if: contains(toJson(github.event.commits), '[ci skip] ') == false
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
