@@ -9,15 +9,15 @@ on:
     branches: [ "master" ]
 
 jobs:
-  Java11-Linux:
+  Java17-Linux:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
-    - name: set up JDK 11
+    - name: set up JDK 17
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: '11'
+        java-version: '17'
         cache: gradle
     - name: Build with Gradle
       run: ./gradlew build --console=plain --stacktrace
