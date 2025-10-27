@@ -9,7 +9,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  Java17-Linux:
+  Java17-x-Android:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
