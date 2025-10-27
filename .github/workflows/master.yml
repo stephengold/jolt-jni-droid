@@ -4,20 +4,22 @@
 name: CI at GitHub
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 jobs:
   Java17-x-Android:
     if: contains(toJson(github.event.commits), '[ci skip] ') == false
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/setup-java@v5
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-    - uses: actions/checkout@v5
-    - uses: gradle/actions/setup-gradle@v4
-    - name: gradlew build
-      run: ./gradlew build --console=plain --stacktrace
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: actions/checkout@v5
+      - uses: gradle/actions/setup-gradle@v4
+      - name: gradlew build
+        run: |
+          ./gradlew build \
+            --console=plain --stacktrace
