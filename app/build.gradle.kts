@@ -38,5 +38,5 @@ dependencies {
     implementation(libs.material)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
-    implementation("com.github.stephengold", "jolt-jni-Android", "3.5.2", "", "SpDebug", "aar")
+    implementation("com.github.stephengold", "jolt-jni-Android", "3.6.0", "", "SpDebug", "aar")
 }
