@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.github.stephengold.joltjni.droid"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.github.stephengold.joltjni.droid"
