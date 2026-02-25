@@ -42,7 +42,6 @@ import com.github.stephengold.joltjni.BroadPhaseLayerInterfaceTable;
 import com.github.stephengold.joltjni.JobSystem;
 import com.github.stephengold.joltjni.JobSystemThreadPool;
 import com.github.stephengold.joltjni.Jolt;
-import com.github.stephengold.joltjni.JoltPhysicsObject;
 import com.github.stephengold.joltjni.ObjectLayerPairFilterTable;
 import com.github.stephengold.joltjni.ObjectVsBroadPhaseLayerFilter;
 import com.github.stephengold.joltjni.ObjectVsBroadPhaseLayerFilterTable;
@@ -61,6 +60,7 @@ import com.github.stephengold.joltjni.readonly.ConstPlane;
 import com.github.stephengold.joltjni.readonly.ConstShape;
 import com.github.stephengold.joltjni.readonly.RVec3Arg;
 import com.github.stephengold.joltjni.readonly.Vec3Arg;
+import testjoltjni.TestUtils;
 
 public class MainFragment extends Fragment {
     // *************************************************************************
@@ -107,15 +107,7 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         System.loadLibrary("joltjni");
-
-        //Jolt.setTraceAllocations(true); // to log Jolt-JNI heap allocations
-        JoltPhysicsObject.startCleaner(); // to reclaim native memory
-        Jolt.registerDefaultAllocator(); // tell Jolt Physics to use malloc/free
-        Jolt.installDefaultAssertCallback();
-        Jolt.installDefaultTraceCallback();
-        boolean success = Jolt.newFactory();
-        assert success;
-        Jolt.registerTypes();
+        TestUtils.initializeNativeLibrary();
 
         physicsSystem = createSystem();
         populateSystem();
