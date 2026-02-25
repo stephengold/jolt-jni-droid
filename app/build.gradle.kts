@@ -5,17 +5,9 @@ plugins {
 }
 
 android {
-    namespace = "com.github.stephengold.joltjni.droid"
-    compileSdk = 36
-
-    defaultConfig {
-        applicationId = "com.github.stephengold.joltjni.droid"
-        minSdk = 33
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+    buildFeatures {
+        viewBinding = true
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -29,9 +21,15 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    buildFeatures {
-        viewBinding = true
+    compileSdk = 36
+    defaultConfig {
+        applicationId = "com.github.stephengold.joltjni.droid"
+        minSdk = 33
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0"
     }
+    namespace = "com.github.stephengold.joltjni.droid"
 }
 
 dependencies {
