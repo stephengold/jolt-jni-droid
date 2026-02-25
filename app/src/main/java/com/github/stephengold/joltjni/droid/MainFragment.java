@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2025 Stephen Gold
+ Copyright (c) 2025-2026 Stephen Gold
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
@@ -86,13 +86,13 @@ public class MainFragment extends Fragment {
      */
     private static ConstBody ball;
     /**
-     * system to simulate
-     */
-    private static PhysicsSystem physicsSystem;
-    /**
      * binding to the UI fragment
      */
     private FragmentMainBinding binding;
+    /**
+     * system to simulate
+     */
+    private static PhysicsSystem physicsSystem;
     // *************************************************************************
     // Fragment methods
 
