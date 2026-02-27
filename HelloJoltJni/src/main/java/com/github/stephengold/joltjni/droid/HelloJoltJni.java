@@ -101,7 +101,8 @@ final public class HelloJoltJni {
     // new methods exposed
 
     /**
-     * Simulate a falling sphere and write its coordinates to the specified view.
+     * Simulate a falling sphere and write its coordinates to the specified
+     * view.
      *
      * @param view for displaying coordinates (not {@code null})
      */
