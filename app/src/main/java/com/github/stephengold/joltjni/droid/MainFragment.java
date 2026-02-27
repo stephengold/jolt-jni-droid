@@ -60,7 +60,6 @@ import com.github.stephengold.joltjni.readonly.ConstPlane;
 import com.github.stephengold.joltjni.readonly.ConstShape;
 import com.github.stephengold.joltjni.readonly.RVec3Arg;
 import com.github.stephengold.joltjni.readonly.Vec3Arg;
-import testjoltjni.TestUtils;
 
 public class MainFragment extends Fragment {
     // *************************************************************************
