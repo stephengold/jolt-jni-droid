@@ -13,7 +13,6 @@ navigation = "2.9.7"
 
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-jolt-jni = { group = "com.github.stephengold", name = "jolt-jni-Android", version.ref = "joltjni" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigation" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigation" }
