@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package com.github.stephengold.joltjni.droid;
 
+import android.util.Log;
 import com.github.stephengold.joltjni.Jolt;
 import com.github.stephengold.joltjni.JoltPhysicsObject;
 
@@ -57,6 +58,8 @@ final public class TestUtils {
      * Initialize the loaded native library.
      */
     public static void initializeNativeLibrary() {
+        logLibraryInfo();
+
         Jolt.setTraceAllocations(traceAllocations);
         if (automateFreeing) {
             JoltPhysicsObject.startCleaner(); // to reclaim native memory
@@ -71,5 +74,16 @@ final public class TestUtils {
         boolean success = Jolt.newFactory();
         assert success;
         Jolt.registerTypes();
+    }
+
+    /**
+     * Send basic library information to the Android log during initialization.
+     */
+    public static void logLibraryInfo() {
+        String line = "Jolt JNI version " + Jolt.versionString() + '-';
+        line += Jolt.buildType();
+        line += Jolt.isDoublePrecision() ? "Dp" : "Sp";
+        line += " initializing...";
+        Log.d("jolt-jni", line);
     }
 }
