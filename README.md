@@ -5,6 +5,7 @@ for [the Jolt-JNI physics library][joltjni].
 It contains one subproject:
 
 + HelloJoltJni: the HelloJoltJni sample app
+<img height="150" src="https://raw.githubusercontent.com/stephengold/jolt-jni-droid/refs/heads/master/HelloJoltJni/screenshot.png" alt="HelloJoltJni screenshot">
 
 Complete source code is provided under
 [a 3-clause BSD license][license].
