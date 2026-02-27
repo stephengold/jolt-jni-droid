@@ -26,4 +26,4 @@ dependencyResolutionManagement {
 }
 
 // subprojects:
-include("app")
+include("HelloJoltJni")

@@ -1,4 +1,4 @@
-// Gradle script to build the JoltJNI-on-Android test app
+// Gradle script to build the HelloJoltJni sample app for Android
 
 plugins {
     alias(libs.plugins.android.application) // to build Android libraries

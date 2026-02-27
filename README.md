@@ -4,7 +4,7 @@ for [the Jolt-JNI physics library][joltjni].
 
 It contains one subproject:
 
-+ app: the HelloJoltJni sample application
++ HelloJoltJni: the HelloJoltJni sample app
 
 Complete source code is provided under
 [a 3-clause BSD license][license].

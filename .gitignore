@@ -2,9 +2,10 @@
 /.gradle/
 
 # Ignore Gradle's build output directories:
-/app/build/
+/HelloJoltJni/build/
 /build/
 
+# Ignore local configuration:
 /local.properties
 
 # Ignore IDE-specific directories:
