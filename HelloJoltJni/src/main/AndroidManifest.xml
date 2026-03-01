@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Joltjnidroid"
         tools:targetApi="34">
         <activity
-            android:name=".MainActivity"
+            android:name="com.github.stephengold.joltjni.droid.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Joltjnidroid">
             <intent-filter>
