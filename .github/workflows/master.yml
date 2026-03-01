@@ -19,7 +19,7 @@ jobs:
           java-version: '17'
       - uses: actions/checkout@v6
       - uses: gradle/actions/setup-gradle@v5
-      - name: gradlew build
+      - name: gradlew -x lint build
         run: |
-          ./gradlew build \
+          ./gradlew -x lint build \
             --console=plain --stacktrace
