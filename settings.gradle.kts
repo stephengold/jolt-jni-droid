@@ -27,3 +27,4 @@ dependencyResolutionManagement {
 
 // subprojects:
 include("HelloJoltJni")
+include("SmokeTestAll")

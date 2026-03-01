@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SmokeTestAll</string>
+    <string name="action_settings">Settings</string>
+    <string name="main_fragment_label">Smoke Test All</string>
+</resources>

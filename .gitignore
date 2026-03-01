@@ -3,6 +3,7 @@
 
 # Ignore Gradle's build output directories:
 /HelloJoltJni/build/
+/SmokeTestAll/build/
 /build/
 
 # Ignore local configuration:
