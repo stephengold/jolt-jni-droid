@@ -35,6 +35,25 @@ import com.github.stephengold.joltjni.std.OfStream;
 
 import java.nio.ByteBuffer;
 import testjoltjni.TestUtils;
+import testjoltjni.app.samples.BPLayerInterfaceImpl;
+import testjoltjni.app.samples.ObjectLayerPairFilterImpl;
+import testjoltjni.app.samples.ObjectVsBroadPhaseLayerFilterImpl;
+import testjoltjni.app.samples.PreUpdateParams;
+import testjoltjni.app.samples.SamplesContactListener;
+import testjoltjni.app.samples.Test;
+import testjoltjni.app.samples.broadphase.*;
+import testjoltjni.app.samples.character.*;
+import testjoltjni.app.samples.constraints.*;
+import testjoltjni.app.samples.convexcollision.*;
+import testjoltjni.app.samples.general.*;
+import testjoltjni.app.samples.hair.*;
+import testjoltjni.app.samples.rig.*;
+import testjoltjni.app.samples.scaledshapes.*;
+import testjoltjni.app.samples.shapes.*;
+import testjoltjni.app.samples.softbody.*;
+import testjoltjni.app.samples.tools.*;
+import testjoltjni.app.samples.vehicle.*;
+import testjoltjni.app.samples.water.*;
 
 /**
  * Perform a "smoke test" on each of the Samples tests.
@@ -324,5 +343,208 @@ final public class SmokeTestAll {
      * Smoke test all the packages.
      */
     private static void smokeTestAll() {
+        // broadphase package:
+        smokeTest(new BroadPhaseCastRayTest());
+        smokeTest(new BroadPhaseInsertionTest());
+
+        // character package:
+        smokeTest(new CharacterPlanetTest());
+        smokeTest(new CharacterSpaceShipTest());
+        smokeTest(new CharacterTest());
+        smokeTest(new CharacterVirtualTest());
+
+        // constraints package:
+        smokeTestConstraints();
+
+        // convex-collision package:
+        smokeTest(new CapsuleVsBoxTest());
+        smokeTest(new ClosestPointTest());
+        smokeTest(new ConvexHullShrinkTest());
+        smokeTest(new ConvexHullTest());
+        smokeTest(new EPATest());
+        smokeTest(new InteractivePairsTest());
+        // TODO RandomRayTest (uses templates)
+
+        smokeTestGeneral();
+
+        // hair package:
+        smokeTest(new HairCollisionTest());
+        smokeTest(new HairGravityPreloadTest());
+        smokeTest(new HairTest());
+
+        smokeTestRig();
+        smokeTestScaledShapes();
+        smokeTestShapes();
+        smokeTestSoftBody();
+
+        // tools package:
+        smokeTest(new LoadSnapshotTest());
+
+        // vehicle package:
+        smokeTest(new MotorcycleTest());
+        smokeTest(new TankTest());
+        smokeTest(new VehicleConstraintTest());
+        smokeTest(new VehicleSixDOFTest());
+        smokeTest(new VehicleStressTest());
+
+        // water package:
+        smokeTest(new BoatTest());
+        smokeTest(new WaterShapeTest());
+    }
+
+    /**
+     * Smoke test the "constraints" package.
+     */
+    private static void smokeTestConstraints() {
+        smokeTest(new ConeConstraintTest());
+        smokeTest(new ConstraintPriorityTest());
+        smokeTest(new ConstraintSingularityTest());
+        smokeTest(new ConstraintVsCOMChangeTest());
+        smokeTest(new DistanceConstraintTest());
+        smokeTest(new FixedConstraintTest());
+        smokeTest(new GearConstraintTest());
+        smokeTest(new HingeConstraintTest());
+        smokeTest(new PathConstraintTest());
+        smokeTest(new PointConstraintTest());
+        smokeTest(new PoweredHingeConstraintTest());
+        smokeTest(new PoweredSliderConstraintTest());
+        smokeTest(new PoweredSwingTwistConstraintTest());
+        smokeTest(new PulleyConstraintTest());
+        smokeTest(new RackAndPinionConstraintTest());
+        smokeTest(new SixDOFConstraintTest());
+        smokeTest(new SliderConstraintTest());
+        smokeTest(new SpringTest());
+        smokeTest(new SwingTwistConstraintFrictionTest());
+        smokeTest(new SwingTwistConstraintTest());
+    }
+
+    /**
+     * Smoke test the "general" package.
+     */
+    private static void smokeTestGeneral() {
+        smokeTest(new ActivateDuringUpdateTest());
+        smokeTest(new ActiveEdgesTest());
+        smokeTest(new AllowedDOFsTest());
+        smokeTest(new BigVsSmallTest());
+        smokeTest(new CenterOfMassTest());
+        smokeTest(new ChangeMotionQualityTest());
+        smokeTest(new ChangeMotionTypeTest());
+        smokeTest(new ChangeObjectLayerTest());
+        smokeTest(new ChangeShapeTest());
+        smokeTest(new ContactListenerTest());
+        smokeTest(new ContactManifoldTest());
+        smokeTest(new ConveyorBeltTest());
+        smokeTest(new DampingTest());
+        smokeTest(new DynamicMeshTest());
+        smokeTest(new EnhancedInternalEdgeRemovalTest());
+        smokeTest(new FrictionPerTriangleTest());
+        smokeTest(new FrictionTest());
+        smokeTest(new FunnelTest());
+        smokeTest(new GravityFactorTest());
+        smokeTest(new GyroscopicForceTest());
+        smokeTest(new HeavyOnLightTest());
+        smokeTest(new HighSpeedTest());
+        smokeTest(new IslandTest());
+        smokeTest(new KinematicTest());
+        smokeTest(new LoadSaveBinaryTest());
+        smokeTest(new LoadSaveSceneTest());
+        smokeTest(new ManifoldReductionTest());
+        smokeTest(new ModifyMassTest());
+        // TODO MultithreadedTest
+        smokeTest(new PyramidTest());
+        smokeTest(new RestitutionTest());
+        smokeTest(new SensorTest());
+        smokeTest(new ShapeFilterTest());
+        // TODO SimCollideBodyVsBodyTest (uses templates)
+        // TODO SimShapeFilterTest
+        smokeTest(new SimpleTest());
+        smokeTest(new StackTest());
+        smokeTest(new TwoDFunnelTest());
+        smokeTest(new WallTest());
+    }
+
+    /**
+     * Smoke test the "rig" package.
+     */
+    private static void smokeTestRig() {
+        smokeTest(new BigWorldTest());
+        smokeTest(new CreateRigTest());
+        smokeTest(new KinematicRigTest());
+        smokeTest(new LoadRigTest());
+        smokeTest(new LoadSaveBinaryRigTest());
+        smokeTest(new LoadSaveRigTest());
+        smokeTest(new PoweredRigTest());
+        smokeTest(new RigPileTest());
+        smokeTest(new SkeletonMapperTest());
+        smokeTest(new SoftKeyframedRigTest());
+    }
+
+    /**
+     * Smoke test the "scaledshapes" package.
+     */
+    private static void smokeTestScaledShapes() {
+        smokeTest(new DynamicScaledShape());
+        smokeTest(new ScaledBoxShapeTest());
+        smokeTest(new ScaledCapsuleShapeTest());
+        smokeTest(new ScaledConvexHullShapeTest());
+        smokeTest(new ScaledCylinderShapeTest());
+        smokeTest(new ScaledHeightFieldShapeTest());
+        smokeTest(new ScaledMeshShapeTest());
+        smokeTest(new ScaledMutableCompoundShapeTest());
+        smokeTest(new ScaledOffsetCenterOfMassShapeTest());
+        smokeTest(new ScaledPlaneShapeTest());
+        smokeTest(new ScaledSphereShapeTest());
+        smokeTest(new ScaledStaticCompoundShapeTest());
+        smokeTest(new ScaledTaperedCapsuleShapeTest());
+        smokeTest(new ScaledTaperedCylinderShapeTest());
+        smokeTest(new ScaledTriangleShapeTest());
+    }
+
+    /**
+     * Smoke test the "shapes" package.
+     */
+    private static void smokeTestShapes() {
+        smokeTest(new BoxShapeTest());
+        smokeTest(new CapsuleShapeTest());
+        smokeTest(new ConvexHullShapeTest());
+        smokeTest(new CylinderShapeTest());
+        smokeTest(new DeformedHeightFieldShapeTest());
+        smokeTest(new EmptyShapeTest());
+        smokeTest(new HeightFieldShapeTest());
+        smokeTest(new MeshShapeTest());
+        smokeTest(new MeshShapeUserDataTest());
+        smokeTest(new MutableCompoundShapeTest());
+        smokeTest(new OffsetCenterOfMassShapeTest());
+        smokeTest(new PlaneShapeTest());
+        smokeTest(new RotatedTranslatedShapeTest());
+        smokeTest(new SphereShapeTest());
+        smokeTest(new StaticCompoundShapeTest());
+        smokeTest(new TaperedCapsuleShapeTest());
+        smokeTest(new TaperedCylinderShapeTest());
+        smokeTest(new TriangleShapeTest());
+    }
+
+    /**
+     * Smoke test the "softbody" package.
+     */
+    private static void smokeTestSoftBody() {
+        smokeTest(new SoftBodyBendConstraintTest());
+        smokeTest(new SoftBodyContactListenerTest());
+        smokeTest(new SoftBodyCosseratRodConstraintTest());
+        smokeTest(new SoftBodyCustomUpdateTest());
+        smokeTest(new SoftBodyForceTest());
+        smokeTest(new SoftBodyFrictionTest());
+        smokeTest(new SoftBodyGravityFactorTest());
+        smokeTest(new SoftBodyKinematicTest());
+        smokeTest(new SoftBodyLRAConstraintTest());
+        smokeTest(new SoftBodyPressureTest());
+        smokeTest(new SoftBodyRestitutionTest());
+        smokeTest(new SoftBodySensorTest());
+        smokeTest(new SoftBodyShapesTest());
+        smokeTest(new SoftBodySkinnedConstraintTest());
+        smokeTest(new SoftBodyStressTest());
+        smokeTest(new SoftBodyUpdatePositionTest());
+        smokeTest(new SoftBodyVertexRadiusTest());
+        smokeTest(new SoftBodyVsFastMovingTest());
     }
 }
