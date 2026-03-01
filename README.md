@@ -6,10 +6,11 @@ It contains 2 modules/subprojects:
 
 + HelloJoltJni: the HelloJoltJni sample app
 <img height="150" src="https://raw.githubusercontent.com/stephengold/jolt-jni-droid/refs/heads/master/HelloJoltJni/screenshot.png" alt="HelloJoltJni screenshot">
+
 + SmokeTestAll: the SmokeTestAll test app
 
-Complete source code is provided under
-[a 3-clause BSD license][license].
+Complete source code (in Java) is provided under
+[a mixed open-source license][license].
 
 
 ## How to build and run jolt-jni-droid from source
