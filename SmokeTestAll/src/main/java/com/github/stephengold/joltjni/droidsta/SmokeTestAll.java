@@ -128,14 +128,13 @@ final public class SmokeTestAll {
 
         context = c;
         textView = view;
-        print(Jolt.getConfigurationString());
-        println();
-        print(" built-in compute systems:");
-        print(Jolt.implementsComputeCpu() ? " CPU" : "");
-        print(Jolt.implementsComputeDx12() ? " DX12" : "");
-        print(Jolt.implementsComputeMtl() ? " MTL" : "");
-        print(Jolt.implementsComputeVk() ? " VK" : "");
-        println();
+        println(Jolt.getConfigurationString());
+        printf(" built-in compute systems:%s%s%s%s%n",
+                Jolt.implementsComputeCpu() ? " CPU" : "",
+                Jolt.implementsComputeDx12() ? " DX12" : "",
+                Jolt.implementsComputeMtl() ? " MTL" : "",
+                Jolt.implementsComputeVk() ? " VK" : ""
+        );
 
         createSharedObjects();
 
@@ -261,7 +260,7 @@ final public class SmokeTestAll {
      *
      * @param text the text to append (not {@code null})
      */
-    private static void print(CharSequence text) {
+    private static void print(String text) {
         textView.append(text);
     }
 
@@ -271,7 +270,7 @@ final public class SmokeTestAll {
      * @param text the text to append (not {@code null})
      */
     private static void printf(String format, Object... args) {
-        CharSequence text = String.format(format, args);
+        String text = String.format(format, args);
         print(text);
     }
 
@@ -279,7 +278,7 @@ final public class SmokeTestAll {
      * Append a line separator to the view.
      */
     private static void println() {
-        CharSequence lineSeparator = System.getProperty("line.separator");
+        String lineSeparator = System.lineSeparator();
         print(lineSeparator);
     }
 
@@ -288,7 +287,7 @@ final public class SmokeTestAll {
      *
      * @param text the text to append (not {@code null})
      */
-    private static void println(CharSequence text) {
+    private static void println(String text) {
         print(text);
         println();
     }
