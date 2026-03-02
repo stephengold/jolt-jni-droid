@@ -129,7 +129,8 @@ final public class TestUtils {
         // callbacks for memory allocation, assertions, and execution tracing:
         Jolt.registerDefaultAllocator();
         Jolt.installCrashAssertCallback();
-        Jolt.installAndroidTraceCallback(Log.INFO, "jolt-jni");
+        Jolt.installJavaTraceCallback(System.err);
+        //Jolt.installAndroidTraceCallback(Log.INFO, "jolt-jni");
 
         // Create and configure the factory:
         boolean success = Jolt.newFactory();
