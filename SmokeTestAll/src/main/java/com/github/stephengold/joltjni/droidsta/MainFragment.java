@@ -28,6 +28,7 @@
  */
 package com.github.stephengold.joltjni.droidsta;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +57,9 @@ public class MainFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SmokeTestAll.run(binding.textview);
+        // TODO run on a separate thread
+        Context context = view.getContext();
+        SmokeTestAll.run(context, binding.textview);
     }
 
     @Override

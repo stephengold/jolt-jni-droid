@@ -29,11 +29,14 @@
 package com.github.stephengold.joltjni.droidsta;
 
 import com.github.stephengold.joltjni.*;
+
+import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
 import com.github.stephengold.joltjni.enumerate.EPhysicsUpdateError;
 import com.github.stephengold.joltjni.std.OfStream;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import testjoltjni.TestUtils;
 import testjoltjni.app.samples.BPLayerInterfaceImpl;
@@ -82,6 +85,10 @@ final public class SmokeTestAll {
      */
     private static ComputeSystem computeSystem;
     /**
+     * runtime environment of this app
+     */
+    private static Context context;
+    /**
      * renderer shared by all test objects
      */
     private static DebugRenderer renderer;
@@ -112,12 +119,14 @@ final public class SmokeTestAll {
     /**
      * Execute the tests, logging progress to the specified view.
      *
+     * @param c the app's runtime environment (not {@code null})
      * @param view for displaying progress (not {@code null})
      */
-    static void run(TextView view) {
+    static void run(Context c, TextView view) {
         System.loadLibrary("joltjni");
         TestUtils.initializeNativeLibrary();
 
+        context = c;
         textView = view;
         print(Jolt.getConfigurationString());
         println();
@@ -146,7 +155,10 @@ final public class SmokeTestAll {
     private static void createSharedObjects() {
         // All tests share a single DebugRenderer:
         assert Jolt.implementsDebugRendering();
-        String fileName = "SmokeTestAll.jor";
+        File dir = context.getExternalFilesDir(null);
+        File file = new File(dir, "SmokeTestAll.jor");
+        String fileName = file.getAbsolutePath();
+        Log.i("jolt-jni", "DebugRenderer will record to " + fileName);
         int mode = StreamOutWrapper.out()
                 | StreamOutWrapper.binary() | StreamOutWrapper.trunc();
         OfStream ofStream = new OfStream(fileName, mode);
