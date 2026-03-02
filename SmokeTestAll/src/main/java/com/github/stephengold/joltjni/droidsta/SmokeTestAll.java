@@ -244,7 +244,7 @@ final public class SmokeTestAll {
      *
      * @param text the text to append (not {@code null})
      */
-    private static void print(String text) {
+    private static void print(CharSequence text) {
         textView.append(text);
     }
 
@@ -254,7 +254,7 @@ final public class SmokeTestAll {
      * @param text the text to append (not {@code null})
      */
     private static void printf(String format, Object... args) {
-        String text = String.format(format, args);
+        CharSequence text = String.format(format, args);
         print(text);
     }
 
@@ -262,7 +262,7 @@ final public class SmokeTestAll {
      * Append a line separator to the view.
      */
     private static void println() {
-        String lineSeparator = System.getProperty("line.separator");
+        CharSequence lineSeparator = System.getProperty("line.separator");
         print(lineSeparator);
     }
 
@@ -271,7 +271,7 @@ final public class SmokeTestAll {
      *
      * @param text the text to append (not {@code null})
      */
-    private static void println(String text) {
+    private static void println(CharSequence text) {
         print(text);
         println();
     }
