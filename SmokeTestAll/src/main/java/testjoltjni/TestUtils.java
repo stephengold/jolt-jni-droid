@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package testjoltjni;
 
+import android.util.Log;
 import com.github.stephengold.joltjni.BroadPhaseLayerInterface;
 import com.github.stephengold.joltjni.BroadPhaseLayerInterfaceTable;
 import com.github.stephengold.joltjni.Jolt;
@@ -38,7 +39,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.nio.ByteBuffer;
 import java.util.Collection;
 
@@ -119,7 +119,7 @@ final public class TestUtils {
      * Initialize the loaded native library.
      */
     public static void initializeNativeLibrary() {
-        printLibraryInfo(System.out);
+        logLibraryInfo();
 
         Jolt.setTraceAllocations(traceAllocations);
         if (automateFreeing) {
@@ -259,6 +259,17 @@ final public class TestUtils {
     }
 
     /**
+     * Log basic library information during initialization.
+     */
+    public static void logLibraryInfo() {
+        String message = String.format(
+                "Jolt JNI version %s-%s%s initializing%n",
+                Jolt.versionString(), Jolt.buildType(),
+                Jolt.isDoublePrecision() ? "Dp" : "Sp");
+        Log.i("jolt-jni", message);
+    }
+
+    /**
      * Return the recommended number of worker threads.
      *
      * @return the count (&ge;1)
@@ -271,31 +282,6 @@ final public class TestUtils {
         }
 
         return result;
-    }
-
-    /**
-     * Print basic library information to the specified stream during
-     * initialization.
-     *
-     * @param printStream the stream to print to (not {@code null})
-     */
-    public static void printLibraryInfo(PrintStream printStream) {
-        printStream.print("Jolt JNI version ");
-        printStream.print(Jolt.versionString());
-        printStream.print('-');
-
-        String buildType = Jolt.buildType();
-        printStream.print(buildType);
-
-        if (Jolt.isDoublePrecision()) {
-            printStream.print("Dp");
-        } else {
-            printStream.print("Sp");
-        }
-
-        printStream.println(" initializing...");
-        printStream.println();
-        printStream.flush();
     }
 
     /**
