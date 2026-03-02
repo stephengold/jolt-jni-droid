@@ -29,6 +29,7 @@
 package com.github.stephengold.joltjni.droidsta;
 
 import com.github.stephengold.joltjni.*;
+import android.util.Log;
 import android.widget.TextView;
 import com.github.stephengold.joltjni.enumerate.EPhysicsUpdateError;
 import com.github.stephengold.joltjni.std.OfStream;
@@ -129,7 +130,11 @@ final public class SmokeTestAll {
 
         createSharedObjects();
 
-        smokeTestAll();
+        try {
+            smokeTestAll();
+        } catch (Exception e) {
+            Log.wtf("jolt-jni", e);
+        }
     }
     // *************************************************************************
     // private methods
