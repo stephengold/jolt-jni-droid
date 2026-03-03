@@ -162,8 +162,9 @@ final public class SmokeTestAll implements Runnable {
 
         try {
             smokeTestAll();
-        } catch (Exception e) {
-            Log.wtf("jolt-jni", e);
+        } catch (Exception exception) {
+            Log.wtf("jolt-jni", exception);
+            System.exit(-1);
         }
 
         printf("%nAll %d test%s passed!%n",
