@@ -35,8 +35,11 @@ import android.util.Log;
 import android.widget.TextView;
 import com.github.stephengold.joltjni.enumerate.EPhysicsUpdateError;
 import com.github.stephengold.joltjni.std.OfStream;
-
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import testjoltjni.TestUtils;
 import testjoltjni.app.samples.BPLayerInterfaceImpl;
@@ -153,6 +156,7 @@ final public class SmokeTestAll {
         );
 
         createSharedObjects();
+        createFiles();
 
         try {
             smokeTestAll();
@@ -162,6 +166,63 @@ final public class SmokeTestAll {
     }
     // *************************************************************************
     // private methods
+
+    /**
+     * Copy the specified resource to an external file, so its content can be
+     * read directly by native code.
+     *
+     * @param resourceId the ID of the Android resource to copy
+     * @param path the destination filesystem path relative to the external
+     * files directory (not {@code null}, parent directory should already exist)
+     */
+    private static void copyResourceToFile(int resourceId, String path)
+            throws IOException {
+        InputStream in = context.getResources().openRawResource(resourceId);
+        byte[] bytes = in.readAllBytes();
+        in.close();
+
+        String externalPath = externalize(path);
+        File externalFile = new File(externalPath);
+        OutputStream out = new FileOutputStream(externalFile);
+        out.write(bytes);
+        out.close();
+
+        Log.i("jolt-jni", "copied resource to " + externalPath);
+    }
+
+    /**
+     * Create data files that the tests will read.
+     */
+    private static void createFiles() {
+        try {
+            String dirPath = externalize("Assets");
+            File dir = new File(dirPath);
+            dir.mkdir();
+
+            dirPath = externalize("Assets/Human");
+            dir = new File(dirPath);
+            dir.mkdir();
+
+            copyResourceToFile(R.raw.dead_pose1, "Assets/Human/dead_pose1.tof");
+            copyResourceToFile(R.raw.dead_pose2, "Assets/Human/dead_pose2.tof");
+            copyResourceToFile(R.raw.dead_pose3, "Assets/Human/dead_pose3.tof");
+            copyResourceToFile(R.raw.dead_pose4, "Assets/Human/dead_pose4.tof");
+            copyResourceToFile(R.raw.face, "Assets/face.bin");
+            copyResourceToFile(R.raw.human, "Assets/Human.tof");
+            copyResourceToFile(R.raw.jog_hd, "Assets/Human/jog_hd.tof");
+            copyResourceToFile(R.raw.neutral, "Assets/Human/neutral.tof");
+            copyResourceToFile(R.raw.neutral_hd, "Assets/Human/neutral_hd.tof");
+            copyResourceToFile(R.raw.skeleton_hd, "Assets/Human/skeleton_hd.tof");
+            copyResourceToFile(R.raw.snapshot, "snapshot.bin");
+            copyResourceToFile(R.raw.sprint, "Assets/Human/sprint.tof");
+            copyResourceToFile(R.raw.walk, "Assets/Human/walk.tof");
+            copyResourceToFile(R.raw.wstraight, "Assets/wStraight.hair");
+
+        } catch (IOException e) {
+            Log.wtf("jolt-jni", e);
+            System.exit(-1);
+        }
+    }
 
     /**
      * Allocate and initialize the shared DebugRenderer, TempAllocator,
