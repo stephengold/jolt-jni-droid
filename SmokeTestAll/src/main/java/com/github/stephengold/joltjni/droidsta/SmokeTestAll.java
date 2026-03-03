@@ -165,6 +165,9 @@ final public class SmokeTestAll implements Runnable {
         } catch (Exception e) {
             Log.wtf("jolt-jni", e);
         }
+
+        printf("%nAll %d test%s passed!%n",
+                numTests, (numTests == 1) ? "" : "s");
     }
     // *************************************************************************
     // private methods
@@ -338,6 +341,8 @@ final public class SmokeTestAll implements Runnable {
      * @param text the text to append (not {@code null})
      */
     private void print(String text) {
+        Log.i("jolt-jni", "print: " + text);
+
         Executor executor = context.getMainExecutor();
         executor.execute(() -> textView.append(text));
     }
