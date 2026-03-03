@@ -8,6 +8,7 @@ It contains 2 modules/subprojects:
 <img height="150" src="https://raw.githubusercontent.com/stephengold/jolt-jni-droid/refs/heads/master/HelloJoltJni/screenshot.png" alt="HelloJoltJni screenshot">
 
 + SmokeTestAll: the SmokeTestAll test app
+<img height="150" src="https://raw.githubusercontent.com/stephengold/jolt-jni-droid/refs/heads/master/SmokeTestAll/screenshot.png" alt="SmokeTestAll screenshot">
 
 Complete source code (in Java) is provided under
 [a mixed open-source license][license].
