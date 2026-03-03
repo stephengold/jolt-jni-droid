@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package testjoltjni.app.samples.rig;
 import com.github.stephengold.joltjni.*;
+import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 import com.github.stephengold.joltjni.enumerate.*;
 import com.github.stephengold.joltjni.readonly.*;
 import com.github.stephengold.joltjni.std.*;
@@ -62,7 +63,7 @@ public void Initialize()
 
 	// Load animation
 	SkeletalAnimationRef animation=new SkeletalAnimationRef();
-	if (!ObjectStreamIn.sReadObject("Assets/Human/dead_pose1.tof", animation))
+	if (!ObjectStreamIn.sReadObject(SmokeTestAll.externalize("Assets/Human/dead_pose1.tof"), animation))
 		FatalError("Could not open animation");
 	SkeletonPose pose=new SkeletonPose();
 	pose.setSkeleton(settings.getSkeleton());

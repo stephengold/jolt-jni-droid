@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package testjoltjni.app.samples.rig;
 import com.github.stephengold.joltjni.*;
+import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 import com.github.stephengold.joltjni.enumerate.*;
 import com.github.stephengold.joltjni.std.*;
 import java.util.*;
@@ -87,7 +88,7 @@ public void Initialize()
 	SkeletalAnimationRef animation[]={new SkeletalAnimationRef(),new SkeletalAnimationRef(),new SkeletalAnimationRef(),new SkeletalAnimationRef()};
 	for (int i = 0; i < cAnimationCount; ++i)
 	{
-		if (!ObjectStreamIn.sReadObject(String.format("Assets/Human/dead_pose%d.tof", i + 1), animation[i]))
+		if (!ObjectStreamIn.sReadObject(SmokeTestAll.externalize(String.format("Assets/Human/dead_pose%d.tof", i + 1)), animation[i]))
 			FatalError("Could not open animation");
 	}
 

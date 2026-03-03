@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package testjoltjni.app.samples.rig;
 import com.github.stephengold.joltjni.*;
+import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 import com.github.stephengold.joltjni.enumerate.*;
 import testjoltjni.app.samples.*;
 import static com.github.stephengold.joltjni.operator.Op.*;
@@ -75,7 +76,7 @@ public void Initialize()
 	mRagdoll.addToPhysicsSystem(EActivation.Activate);
 
 	// Load animation
-	if (!ObjectStreamIn.sReadObject("Assets/Human/walk.tof", mAnimation))
+	if (!ObjectStreamIn.sReadObject(SmokeTestAll.externalize("Assets/Human/walk.tof"), mAnimation))
 		FatalError("Could not open animation");
 
 	// Initialize pose

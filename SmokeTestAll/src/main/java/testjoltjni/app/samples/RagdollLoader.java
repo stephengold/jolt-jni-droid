@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package testjoltjni.app.samples;
 import com.github.stephengold.joltjni.*;
+import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 import com.github.stephengold.joltjni.enumerate.*;
 import static com.github.stephengold.joltjni.Jolt.*;
 import static com.github.stephengold.joltjni.operator.Op.*;
@@ -37,7 +38,7 @@ public static RagdollSettings sLoad(String inFileName, EMotionType inMotionType,
 {
 	// Read the ragdoll
 	RagdollSettingsRef ragdoll = new RagdollSettingsRef();
-	if (!ObjectStreamIn.sReadObject(inFileName, ragdoll))
+	if (!ObjectStreamIn.sReadObject(SmokeTestAll.externalize(inFileName), ragdoll))
 		throw new RuntimeException("Unable to read ragdoll");
 
 	for (Part p : ragdoll.getParts())

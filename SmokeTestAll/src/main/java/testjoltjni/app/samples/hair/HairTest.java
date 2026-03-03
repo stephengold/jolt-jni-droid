@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package testjoltjni.app.samples.hair;
 import com.github.stephengold.joltjni.*;
+import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 import com.github.stephengold.joltjni.enumerate.*;
 import com.github.stephengold.joltjni.readonly.*;
 import com.github.stephengold.joltjni.std.*;
@@ -85,13 +86,13 @@ public void Initialize()
 {
 	// Check groom file exists
 	String groom_file = "w" + (String)(sSelectedGroom.mName) + ".hair";
-	String full_path = "Assets/" + groom_file;
+	String full_path = SmokeTestAll.externalize("Assets/" + groom_file);
 	if (!new File(full_path).exists())
 		throw new RuntimeException(String.format("File %s not found.\n\n"+
 			"wCurly.hair, wStraight.hair and wWavy.hair should be downloaded from https://www.cemyuksel.com/research/hairmodels/ (or by running Assets/download_hair.sh)", full_path));
 
 	// Read face mesh and animation
-	StreamInWrapper stream=StreamInWrapper.open("Assets/face.bin", StreamInWrapper.in() | StreamInWrapper.binary());
+	StreamInWrapper stream=StreamInWrapper.open(SmokeTestAll.externalize("Assets/face.bin"), StreamInWrapper.in() | StreamInWrapper.binary());
 
 	// Neck joint index
 	mHeadJointIdx=stream.readInt();

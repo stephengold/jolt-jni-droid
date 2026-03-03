@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package testjoltjni.app.samples.general;
 import com.github.stephengold.joltjni.*;
+import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 import com.github.stephengold.joltjni.enumerate.*;
 import com.github.stephengold.joltjni.readonly.*;
 import java.util.*;
@@ -118,7 +119,7 @@ if (Jolt.supportsObjectStream()){
 	{
 if (Jolt.supportsObjectStream()){
 		SkeletalAnimationRef animation=new SkeletalAnimationRef();
-		if (!ObjectStreamIn.sReadObject("Assets/Human/dead_pose1.tof", animation))
+		if (!ObjectStreamIn.sReadObject(SmokeTestAll.externalize("Assets/Human/dead_pose1.tof"), animation))
 			FatalError("Could not open animation");
 		animation.sample(0.0f, ragdoll_pose);
 }else{

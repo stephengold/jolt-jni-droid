@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package testjoltjni.app.samples.rig;
 import com.github.stephengold.joltjni.*;
+import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 import com.github.stephengold.joltjni.enumerate.*;
 import testjoltjni.app.samples.*;
 import static com.github.stephengold.joltjni.Jolt.*;
@@ -60,22 +61,22 @@ public void Initialize()
 
 	// Load neutral animation for ragdoll
 	SkeletalAnimationRef neutral_ragdoll=new SkeletalAnimationRef();
-	if (!ObjectStreamIn.sReadObject("Assets/Human/neutral.tof", neutral_ragdoll))
+	if (!ObjectStreamIn.sReadObject(SmokeTestAll.externalize("Assets/Human/neutral.tof"), neutral_ragdoll))
 		FatalError("Could not open neutral animation");
 
 	// Load animation skeleton
 	SkeletonRef animation_skeleton=new SkeletonRef();
-	if (!ObjectStreamIn.sReadObject("Assets/Human/skeleton_hd.tof", animation_skeleton))
+	if (!ObjectStreamIn.sReadObject(SmokeTestAll.externalize("Assets/Human/skeleton_hd.tof"), animation_skeleton))
 		FatalError("Could not open skeleton_hd");
 	animation_skeleton.getPtr().calculateParentJointIndices();
 
 	// Load neutral animation
 	SkeletalAnimationRef neutral_animation=new SkeletalAnimationRef();
-	if (!ObjectStreamIn.sReadObject("Assets/Human/neutral_hd.tof", neutral_animation))
+	if (!ObjectStreamIn.sReadObject(SmokeTestAll.externalize("Assets/Human/neutral_hd.tof"), neutral_animation))
 		FatalError("Could not open neutral_hd animation");
 
 	// Load test animation
-	if (!ObjectStreamIn.sReadObject("Assets/Human/jog_hd.tof", mAnimation))
+	if (!ObjectStreamIn.sReadObject(SmokeTestAll.externalize("Assets/Human/jog_hd.tof"), mAnimation))
 		FatalError("Could not open jog_hd animation");
 
 	// Initialize pose

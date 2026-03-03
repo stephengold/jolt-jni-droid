@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package testjoltjni.app.samples.tools;
 import com.github.stephengold.joltjni.*;
+import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 import com.github.stephengold.joltjni.enumerate.*;
 import testjoltjni.app.samples.*;
 import static com.github.stephengold.joltjni.Jolt.*;
@@ -60,7 +61,7 @@ public void Initialize()
 
 	int flags = StreamInWrapper.in() | StreamInWrapper.binary();
 
-	StreamInWrapper wrapper=StreamInWrapper.open(file_name, flags);
+	StreamInWrapper wrapper=StreamInWrapper.open(SmokeTestAll.externalize(file_name), flags);
 	if (wrapper==null)
 		FatalError("Unable to open file");
 	PhysicsSceneResult result = PhysicsScene.sRestoreFromBinaryState(wrapper);
