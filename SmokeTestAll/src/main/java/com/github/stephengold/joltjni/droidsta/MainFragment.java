@@ -45,6 +45,10 @@ public class MainFragment extends Fragment {
      * binding to the UI fragment
      */
     private FragmentMainBinding binding;
+    /**
+     * thread that performs the tests
+     */
+    private static Thread thread;
     // *************************************************************************
     // Fragment methods
 
@@ -57,10 +61,16 @@ public class MainFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Context context = view.getContext();
-        SmokeTestAll sta = new SmokeTestAll(context, binding.textview);
-        Thread t = new Thread(sta, "SmokeTestAll");
-        t.start();
+
+        synchronized (this) {
+            if (thread == null) { // only start the tests once!
+                Context context = view.getContext();
+                SmokeTestAll sta = new SmokeTestAll(context, binding.textview);
+                Thread t = new Thread(sta, "SmokeTestAll");
+                t.start();
+                thread = t;
+            }
+        }
     }
 
     @Override
