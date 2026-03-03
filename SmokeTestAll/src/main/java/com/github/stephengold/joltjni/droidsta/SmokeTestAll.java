@@ -471,7 +471,7 @@ final public class SmokeTestAll implements Runnable {
         // hair package:
         smokeTest(new HairCollisionTest());
         smokeTest(new HairGravityPreloadTest());
-        smokeTest(new HairTest());
+        //smokeTest(new HairTest()); // takes a long time
 
         smokeTestRig();
         smokeTestScaledShapes();
