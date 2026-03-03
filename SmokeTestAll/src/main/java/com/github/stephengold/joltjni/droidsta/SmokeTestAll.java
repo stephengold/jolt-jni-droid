@@ -123,11 +123,12 @@ final public class SmokeTestAll {
      * @param view for displaying progress (not {@code null})
      */
     static void run(Context c, TextView view) {
+        context = c;
+        textView = view;
+
         System.loadLibrary("joltjni");
         TestUtils.initializeNativeLibrary();
 
-        context = c;
-        textView = view;
         println(Jolt.getConfigurationString());
         printf(" built-in compute systems:%s%s%s%s%n",
                 Jolt.implementsComputeCpu() ? " CPU" : "",
