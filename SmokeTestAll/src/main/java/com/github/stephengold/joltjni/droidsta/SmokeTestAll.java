@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.util.concurrent.Executor;
 import testjoltjni.TestUtils;
 import testjoltjni.app.samples.BPLayerInterfaceImpl;
 import testjoltjni.app.samples.ObjectLayerPairFilterImpl;
@@ -63,12 +64,12 @@ import testjoltjni.app.samples.vehicle.*;
 import testjoltjni.app.samples.water.*;
 
 /**
- * A thread that performs a "smoke test" on each of the JoltPhysics "Samples"
+ * A runnable that performs a "smoke test" on each of the JoltPhysics "Samples"
  * tests.
  *
  * @author Stephen Gold sgold@sonic.net
  */
-final public class SmokeTestAll extends Thread {
+final public class SmokeTestAll implements Runnable {
     // *************************************************************************
     // constants
 
@@ -116,7 +117,7 @@ final public class SmokeTestAll extends Thread {
     // constructors
 
     /**
-     * Construct a thread with the specified context and view.
+     * Construct a runnable with the specified context and view.
      */
     SmokeTestAll(Context c, TextView view) {
         this.context = c;
@@ -337,7 +338,8 @@ final public class SmokeTestAll extends Thread {
      * @param text the text to append (not {@code null})
      */
     private void print(String text) {
-        textView.append(text);
+        Executor executor = context.getMainExecutor();
+        executor.execute(() -> textView.append(text));
     }
 
     /**

@@ -59,8 +59,8 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Context context = view.getContext();
         SmokeTestAll sta = new SmokeTestAll(context, binding.textview);
-        // TODO run on a separate thread
-        sta.run();
+        Thread t = new Thread(sta, "SmokeTestAll");
+        t.start();
     }
 
     @Override
