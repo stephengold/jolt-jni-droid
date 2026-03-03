@@ -57,9 +57,10 @@ public class MainFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // TODO run on a separate thread
         Context context = view.getContext();
-        SmokeTestAll.run(context, binding.textview);
+        SmokeTestAll sta = new SmokeTestAll(context, binding.textview);
+        // TODO run on a separate thread
+        sta.run();
     }
 
     @Override

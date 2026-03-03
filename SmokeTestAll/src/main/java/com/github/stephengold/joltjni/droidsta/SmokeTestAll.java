@@ -63,11 +63,12 @@ import testjoltjni.app.samples.vehicle.*;
 import testjoltjni.app.samples.water.*;
 
 /**
- * Perform a "smoke test" on each of the Samples tests.
+ * A thread that performs a "smoke test" on each of the JoltPhysics "Samples"
+ * tests.
  *
  * @author Stephen Gold sgold@sonic.net
  */
-final public class SmokeTestAll {
+final public class SmokeTestAll extends Thread {
     // *************************************************************************
     // constants
 
@@ -75,46 +76,52 @@ final public class SmokeTestAll {
      * default number of physics steps to simulate during each invocation of
      * {@code smokeTest()}
      */
-    final private static int defaultNumSteps = 1;
+    final private int defaultNumSteps = 1;
     // *************************************************************************
     // fields
 
     /**
      * compute queue shared by all test objects
      */
-    private static ComputeQueue queue;
+    private ComputeQueue queue;
     /**
      * compute system shared by all test objects
      */
-    private static ComputeSystem computeSystem;
+    private ComputeSystem computeSystem;
     /**
-     * runtime environment of this app
+     * runtime environment of the Android app
      */
-    private static Context context;
+    private Context context;
     /**
      * renderer shared by all test objects
      */
-    private static DebugRenderer renderer;
+    private DebugRenderer renderer;
+    /**
+     * directory where external files are stored
+     */
+    private static File externalFilesDirectory;
     /**
      * count invocations of {@code smokeTest()}
      */
-    private static int numTests;
+    private int numTests;
     /**
      * allocator shared by all test objects
      */
-    private static TempAllocator tempAllocator;
+    private TempAllocator tempAllocator;
     /**
      * view for displaying text
      */
-    private static TextView textView;
+    private TextView textView;
     // *************************************************************************
     // constructors
 
     /**
-     * A private constructor to inhibit instantiation of this class.
+     * Construct a thread with the specified context and view.
      */
-    private SmokeTestAll() {
-        // do nothing
+    SmokeTestAll(Context c, TextView view) {
+        this.context = c;
+        this.textView = view;
+        externalFilesDirectory = c.getExternalFilesDir(null);
     }
     // *************************************************************************
     // new methods exposed
@@ -126,24 +133,18 @@ final public class SmokeTestAll {
      * files directory (not {@code null})
      * @return an absolute filesystem path
      */
-    static public String externalize(String relativePath) {
-        File dir = context.getExternalFilesDir(null);
-        File file = new File(dir, relativePath);
+    public static String externalize(String relativePath) {
+        File file = new File(externalFilesDirectory, relativePath);
         String result = file.getAbsolutePath();
 
         return result;
     }
 
     /**
-     * Execute the tests, logging progress to the specified view.
-     *
-     * @param c the app's runtime environment (not {@code null})
-     * @param view for displaying progress (not {@code null})
+     * Perform all the tests.
      */
-    static void run(Context c, TextView view) {
-        context = c;
-        textView = view;
-
+    @Override
+    public void run() {
         System.loadLibrary("joltjni");
         TestUtils.initializeNativeLibrary();
 
@@ -175,7 +176,7 @@ final public class SmokeTestAll {
      * @param path the destination filesystem path relative to the external
      * files directory (not {@code null}, parent directory should already exist)
      */
-    private static void copyResourceToFile(int resourceId, String path)
+    private void copyResourceToFile(int resourceId, String path)
             throws IOException {
         InputStream in = context.getResources().openRawResource(resourceId);
         byte[] bytes = in.readAllBytes();
@@ -193,7 +194,7 @@ final public class SmokeTestAll {
     /**
      * Create data files that the tests will read.
      */
-    private static void createFiles() {
+    private void createFiles() {
         try {
             String dirPath = externalize("Assets");
             File dir = new File(dirPath);
@@ -228,7 +229,7 @@ final public class SmokeTestAll {
      * Allocate and initialize the shared DebugRenderer, TempAllocator,
      * ComputeSystem, and ComputeQueue.
      */
-    private static void createSharedObjects() {
+    private void createSharedObjects() {
         // All tests share a single DebugRenderer:
         assert Jolt.implementsDebugRendering();
         String fileName = externalize("SmokeTestAll.jor");
@@ -335,7 +336,7 @@ final public class SmokeTestAll {
      *
      * @param text the text to append (not {@code null})
      */
-    private static void print(String text) {
+    private void print(String text) {
         textView.append(text);
     }
 
@@ -344,7 +345,7 @@ final public class SmokeTestAll {
      *
      * @param text the text to append (not {@code null})
      */
-    private static void printf(String format, Object... args) {
+    private void printf(String format, Object... args) {
         String text = String.format(format, args);
         print(text);
     }
@@ -352,7 +353,7 @@ final public class SmokeTestAll {
     /**
      * Append a line separator to the view.
      */
-    private static void println() {
+    private void println() {
         String lineSeparator = System.lineSeparator();
         print(lineSeparator);
     }
@@ -362,7 +363,7 @@ final public class SmokeTestAll {
      *
      * @param text the text to append (not {@code null})
      */
-    private static void println(String text) {
+    private void println(String text) {
         print(text);
         println();
     }
@@ -372,7 +373,7 @@ final public class SmokeTestAll {
      *
      * @param test the Test object to use (not {@code null})
      */
-    private static void smokeTest(Test test) {
+    private void smokeTest(Test test) {
         smokeTest(test, defaultNumSteps);
     }
 
@@ -383,7 +384,7 @@ final public class SmokeTestAll {
      * @param numSteps the number of physics steps to simulate (&ge;0,
      * default=defaultNumSteps)
      */
-    private static void smokeTest(Test test, int numSteps) {
+    private void smokeTest(Test test, int numSteps) {
         ++numTests;
 
         // Log the name of the test:
@@ -433,7 +434,7 @@ final public class SmokeTestAll {
     /**
      * Smoke test all the packages.
      */
-    private static void smokeTestAll() {
+    private void smokeTestAll() {
         // broadphase package:
         smokeTest(new BroadPhaseCastRayTest());
         smokeTest(new BroadPhaseInsertionTest());
@@ -486,7 +487,7 @@ final public class SmokeTestAll {
     /**
      * Smoke test the "constraints" package.
      */
-    private static void smokeTestConstraints() {
+    private void smokeTestConstraints() {
         smokeTest(new ConeConstraintTest());
         smokeTest(new ConstraintPriorityTest());
         smokeTest(new ConstraintSingularityTest());
@@ -512,7 +513,7 @@ final public class SmokeTestAll {
     /**
      * Smoke test the "general" package.
      */
-    private static void smokeTestGeneral() {
+    private void smokeTestGeneral() {
         smokeTest(new ActivateDuringUpdateTest());
         smokeTest(new ActiveEdgesTest());
         smokeTest(new AllowedDOFsTest());
@@ -557,7 +558,7 @@ final public class SmokeTestAll {
     /**
      * Smoke test the "rig" package.
      */
-    private static void smokeTestRig() {
+    private void smokeTestRig() {
         smokeTest(new BigWorldTest());
         smokeTest(new CreateRigTest());
         smokeTest(new KinematicRigTest());
@@ -573,7 +574,7 @@ final public class SmokeTestAll {
     /**
      * Smoke test the "scaledshapes" package.
      */
-    private static void smokeTestScaledShapes() {
+    private void smokeTestScaledShapes() {
         smokeTest(new DynamicScaledShape());
         smokeTest(new ScaledBoxShapeTest());
         smokeTest(new ScaledCapsuleShapeTest());
@@ -594,7 +595,7 @@ final public class SmokeTestAll {
     /**
      * Smoke test the "shapes" package.
      */
-    private static void smokeTestShapes() {
+    private void smokeTestShapes() {
         smokeTest(new BoxShapeTest());
         smokeTest(new CapsuleShapeTest());
         smokeTest(new ConvexHullShapeTest());
@@ -618,7 +619,7 @@ final public class SmokeTestAll {
     /**
      * Smoke test the "softbody" package.
      */
-    private static void smokeTestSoftBody() {
+    private void smokeTestSoftBody() {
         smokeTest(new SoftBodyBendConstraintTest());
         smokeTest(new SoftBodyContactListenerTest());
         smokeTest(new SoftBodyCosseratRodConstraintTest());
