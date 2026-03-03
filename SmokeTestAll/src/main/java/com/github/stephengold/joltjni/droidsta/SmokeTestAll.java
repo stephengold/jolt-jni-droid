@@ -345,7 +345,9 @@ final public class SmokeTestAll implements Runnable {
     /**
      * Format the specified arguments and append them to the view.
      *
-     * @param text the text to append (not {@code null})
+     * @param format the format string to use (not {@code null})
+     * @param args the arguments corresponding to the specifiers in the format
+     * string
      */
     private void printf(String format, Object... args) {
         String text = String.format(format, args);
