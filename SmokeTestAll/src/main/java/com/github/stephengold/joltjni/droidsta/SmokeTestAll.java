@@ -117,6 +117,21 @@ final public class SmokeTestAll {
     // new methods exposed
 
     /**
+     * Externalize a filesystem path.
+     *
+     * @param relativePath the desired filesystem path relative to the external
+     * files directory (not {@code null})
+     * @return an absolute filesystem path
+     */
+    static public String externalize(String relativePath) {
+        File dir = context.getExternalFilesDir(null);
+        File file = new File(dir, relativePath);
+        String result = file.getAbsolutePath();
+
+        return result;
+    }
+
+    /**
      * Execute the tests, logging progress to the specified view.
      *
      * @param c the app's runtime environment (not {@code null})
@@ -155,9 +170,7 @@ final public class SmokeTestAll {
     private static void createSharedObjects() {
         // All tests share a single DebugRenderer:
         assert Jolt.implementsDebugRendering();
-        File dir = context.getExternalFilesDir(null);
-        File file = new File(dir, "SmokeTestAll.jor");
-        String fileName = file.getAbsolutePath();
+        String fileName = externalize("SmokeTestAll.jor");
         Log.i("jolt-jni", "DebugRenderer will record to " + fileName);
         int mode = StreamOutWrapper.out()
                 | StreamOutWrapper.binary() | StreamOutWrapper.trunc();
