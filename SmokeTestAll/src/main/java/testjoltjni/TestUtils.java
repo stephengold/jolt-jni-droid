@@ -119,6 +119,7 @@ final public class TestUtils {
      * Initialize the loaded native library.
      */
     public static void initializeNativeLibrary() {
+        Jolt.installAndroidTraceCallback(Log.INFO, "jolt-jni");
         logLibraryInfo();
 
         Jolt.setTraceAllocations(traceAllocations);
@@ -129,8 +130,6 @@ final public class TestUtils {
         // callbacks for memory allocation, assertions, and execution tracing:
         Jolt.registerDefaultAllocator();
         Jolt.installCrashAssertCallback();
-        Jolt.installJavaTraceCallback(System.err);
-        //Jolt.installAndroidTraceCallback(Log.INFO, "jolt-jni");
 
         // Create and configure the factory:
         boolean success = Jolt.newFactory();

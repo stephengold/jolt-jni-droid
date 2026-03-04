@@ -28,6 +28,7 @@
  */
 package com.github.stephengold.joltjni.droid;
 
+import android.util.Log;
 import android.widget.TextView;
 import com.github.stephengold.joltjni.Body;
 import com.github.stephengold.joltjni.BodyCreationSettings;
@@ -113,7 +114,7 @@ final public class HelloJoltJni {
         JoltPhysicsObject.startCleaner(); // to reclaim native memory
         Jolt.registerDefaultAllocator(); // tell Jolt Physics to use malloc/free
         Jolt.installDefaultAssertCallback();
-        Jolt.installDefaultTraceCallback();
+        Jolt.installAndroidTraceCallback(Log.INFO, "jolt-jni");
 
         // Create and configure the factory:
         boolean success = Jolt.newFactory();
