@@ -27,7 +27,7 @@ android {
     compileSdk = 36
     defaultConfig {
         applicationId = "com.github.stephengold.joltjni.droidsta"
-        minSdk = 33
+        minSdk = 33 // in order to use Jolt JNI
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
