@@ -28,65 +28,87 @@
  */
 package com.github.stephengold.joltjni.droidsta;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import com.github.stephengold.joltjni.droidsta.databinding.ActivityMainBinding;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
+    // *************************************************************************
+    // fields
 
-    private AppBarConfiguration appBarConfiguration;
+    /**
+     * true while tests are running
+     */
+    static boolean running = true;
+    /**
+     * buffer holding text output from the tests, to be displayed
+     */
+    static StringBuffer buffer;
+    // *************************************************************************
+    // AppCompatActivity methods
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e("jolt-jni", "create MainActivity");
         super.onCreate(savedInstanceState);
 
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_main);
 
-        setSupportActionBar(binding.toolbar);
+        // edge-to-edge layout with system-bar insets:
+        View mainView = findViewById(R.id.main);
+        ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            mlp.leftMargin = insets.left;
+            mlp.bottomMargin = insets.bottom;
+            mlp.rightMargin = insets.right;
+            v.setLayoutParams(mlp);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
-        NavController navController = Navigation.findNavController(
-                this, R.id.nav_host_fragment_content_main);
-        this.appBarConfiguration
-                = new AppBarConfiguration.Builder(navController.getGraph())
-                        .build();
-        NavigationUI.setupActionBarWithNavController(
-                this, navController, appBarConfiguration);
-    }
+        TextView textView = findViewById(R.id.textview);
+        textView.setMovementMethod(new ScrollingMovementMethod());
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (buffer == null) { // for the original activity only!
+            buffer = new StringBuffer();
+            Context context = mainView.getContext();
+            SmokeTestAll sta = new SmokeTestAll(context);
+            Thread testThread = new Thread(sta, "SmokeTestAll");
+            testThread.start();
         }
 
-        return super.onOptionsItemSelected(item);
-    }
+        Runnable update = () -> {
+            Log.e("jolt-jni", "execute update");
+            String text = buffer.toString();
+            textView.setText(text);
+            if (!running) {
+                textView.setGravity(11);
+            }
+        };
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(
-                this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+        Executor executor = ContextCompat.getMainExecutor(this);
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                executor.execute(update);
+            }
+        };
+
+        Timer timer = new Timer();
+        long delayMilliseconds = 0L;
+        long intervalMilliseconds = 500L;
+        timer.schedule(task, delayMilliseconds, intervalMilliseconds);
     }
 }

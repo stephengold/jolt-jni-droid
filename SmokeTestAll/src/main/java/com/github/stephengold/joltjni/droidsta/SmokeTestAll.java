@@ -28,11 +28,10 @@
  */
 package com.github.stephengold.joltjni.droidsta;
 
-import com.github.stephengold.joltjni.*;
-
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
-import android.widget.TextView;
+import com.github.stephengold.joltjni.*;
 import com.github.stephengold.joltjni.enumerate.EPhysicsUpdateError;
 import com.github.stephengold.joltjni.std.OfStream;
 import java.io.File;
@@ -41,7 +40,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.concurrent.Executor;
 import testjoltjni.TestUtils;
 import testjoltjni.app.samples.BPLayerInterfaceImpl;
 import testjoltjni.app.samples.ObjectLayerPairFilterImpl;
@@ -90,15 +88,11 @@ final public class SmokeTestAll implements Runnable {
      */
     private ComputeSystem computeSystem;
     /**
-     * runtime environment of the Android app
-     */
-    private Context context;
-    /**
-     * renderer shared by all test objects
+     * physics debug renderer shared by all test objects
      */
     private DebugRenderer renderer;
     /**
-     * directory where external files are stored
+     * directory where external data files are stored
      */
     private static File externalFilesDirectory;
     /**
@@ -106,22 +100,23 @@ final public class SmokeTestAll implements Runnable {
      */
     private int numTests;
     /**
-     * allocator shared by all test objects
+     * access the application's resources
+     */
+    final private Resources resources;
+    /**
+     * allocator shared by all physics test objects
      */
     private TempAllocator tempAllocator;
-    /**
-     * view for displaying text
-     */
-    private TextView textView;
     // *************************************************************************
     // constructors
 
     /**
-     * Construct a runnable with the specified context and view.
+     * Construct a runnable with the specified context.
+     *
+     * @param c the environment in which the app is running (not {@code null})
      */
-    SmokeTestAll(Context c, TextView view) {
-        this.context = c;
-        this.textView = view;
+    SmokeTestAll(Context c) {
+        this.resources = c.getResources();
         externalFilesDirectory = c.getExternalFilesDir(null);
     }
     // *************************************************************************
@@ -167,8 +162,9 @@ final public class SmokeTestAll implements Runnable {
             System.exit(-1);
         }
 
-        printf("%nAll %d test%s passed!%n",
-                numTests, (numTests == 1) ? "" : "s");
+        printf("%nAll %d test%s passed!%n", numTests,
+                (numTests == 1) ? "" : "s");
+        MainActivity.running = false;
     }
     // *************************************************************************
     // private methods
@@ -183,17 +179,17 @@ final public class SmokeTestAll implements Runnable {
      */
     private void copyResourceToFile(int resourceId, String path)
             throws IOException {
-        InputStream in = context.getResources().openRawResource(resourceId);
-        byte[] bytes = in.readAllBytes();
-        in.close();
+        byte[] bytes;
+        try (InputStream in = resources.openRawResource(resourceId)) {
+            bytes = in.readAllBytes();
 
-        String externalPath = externalize(path);
-        File externalFile = new File(externalPath);
-        OutputStream out = new FileOutputStream(externalFile);
-        out.write(bytes);
-        out.close();
-
-        Log.i("jolt-jni", "copied resource to " + externalPath);
+            String externalPath = externalize(path);
+            File externalFile = new File(externalPath);
+            try (OutputStream out = new FileOutputStream(externalFile)) {
+                out.write(bytes);
+                Log.i("jolt-jni", "copied resource to " + externalPath);
+            }
+        }
     }
 
     /**
@@ -342,10 +338,8 @@ final public class SmokeTestAll implements Runnable {
      * @param text the text to append (not {@code null})
      */
     private void print(String text) {
-        Log.i("jolt-jni", "print: " + text);
-
-        Executor executor = context.getMainExecutor();
-        executor.execute(() -> textView.append(text));
+        Log.e("jolt-jni", "print:  " + text);
+        MainActivity.buffer.append(text);
     }
 
     /**
