@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2025-2026 Stephen Gold
+ Copyright (c) 2024-2026 Stephen Gold
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
@@ -28,8 +28,9 @@
  */
 package com.github.stephengold.joltjni.droid;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
-import android.widget.TextView;
 import com.github.stephengold.joltjni.Body;
 import com.github.stephengold.joltjni.BodyCreationSettings;
 import com.github.stephengold.joltjni.BodyInterface;
@@ -62,7 +63,7 @@ import com.github.stephengold.joltjni.readonly.Vec3Arg;
  *
  * @author Stephen Gold sgold@sonic.net
  */
-final public class HelloJoltJni {
+final public class HelloJoltJni implements Runnable {
     // *************************************************************************
     // constants
 
@@ -93,10 +94,11 @@ final public class HelloJoltJni {
     // constructors
 
     /**
-     * A private constructor to inhibit instantiation of this class.
+     * Construct a runnable with the specified context.
+     *
+     * @param c the environment in which the app is running (not {@code null})
      */
-    private HelloJoltJni() {
-        // do nothing
+    HelloJoltJni(Context c) {
     }
     // *************************************************************************
     // new methods exposed
@@ -104,10 +106,9 @@ final public class HelloJoltJni {
     /**
      * Simulate a falling sphere and write its coordinates to the specified
      * view.
-     *
-     * @param view for displaying coordinates (not {@code null})
      */
-    static void simulate(TextView view) {
+    @Override
+    public void run() {
         System.loadLibrary("joltjni");
 
         //Jolt.setTraceAllocations(true); // to log Jolt-JNI heap allocations
@@ -139,7 +140,7 @@ final public class HelloJoltJni {
 
             RVec3Arg location = ball.getPosition();
             String textLine = String.format("%s%n", location);
-            view.append(textLine);
+            MainActivity.buffer.append(textLine);
         }
     }
     // *************************************************************************

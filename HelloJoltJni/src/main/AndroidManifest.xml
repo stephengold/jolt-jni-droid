@@ -14,11 +14,9 @@
         tools:targetApi="34">
         <activity
             android:name="com.github.stephengold.joltjni.droid.MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Joltjnidroid">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
