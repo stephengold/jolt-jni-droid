@@ -76,6 +76,10 @@ final public class SmokeTestAll implements Runnable {
      * {@code smokeTest()}
      */
     final private int defaultNumSteps = 1;
+    /**
+     * tag for log output
+     */
+    final private static String logTag = SmokeTestAll.class.getName();
     // *************************************************************************
     // fields
 
@@ -158,7 +162,7 @@ final public class SmokeTestAll implements Runnable {
         try {
             smokeTestAll();
         } catch (Exception exception) {
-            Log.wtf("jolt-jni", exception);
+            Log.wtf(logTag, exception);
             System.exit(-1);
         }
 
@@ -187,7 +191,7 @@ final public class SmokeTestAll implements Runnable {
             File externalFile = new File(externalPath);
             try (OutputStream out = new FileOutputStream(externalFile)) {
                 out.write(bytes);
-                Log.i("jolt-jni", "copied resource to " + externalPath);
+                Log.i(logTag, "copied resource to " + externalPath);
             }
         }
     }
@@ -221,7 +225,7 @@ final public class SmokeTestAll implements Runnable {
             copyResourceToFile(R.raw.wstraight, "Assets/wStraight.hair");
 
         } catch (IOException e) {
-            Log.wtf("jolt-jni", e);
+            Log.wtf(logTag, e);
             System.exit(-1);
         }
     }
@@ -338,7 +342,7 @@ final public class SmokeTestAll implements Runnable {
      * @param text the text to append (not {@code null})
      */
     private void print(String text) {
-        Log.e("jolt-jni", "print:  " + text);
+        Log.i(logTag, "print:  " + text);
         MainActivity.buffer.append(text);
     }
 

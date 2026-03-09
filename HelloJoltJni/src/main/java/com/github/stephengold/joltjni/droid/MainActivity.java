@@ -46,6 +46,13 @@ import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
     // *************************************************************************
+    // constants
+
+    /**
+     * tag for log output
+     */
+    final private static String logTag = MainActivity.class.getName();
+    // *************************************************************************
     // fields
 
     /**
@@ -61,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.e("jolt-jni", "create MainActivity");
+        Log.i(logTag, "create MainActivity");
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -90,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Runnable update = () -> {
-            Log.e("jolt-jni", "execute update");
+            Log.i(logTag, "execute update");
             String text = buffer.toString();
             textView.setText(text);
             if (!running) {

@@ -79,6 +79,10 @@ final public class HelloJoltJni implements Runnable {
      * object layer for non-moving objects
      */
     final private static int objLayerNonMoving = 1;
+    /**
+     * tag for log output
+     */
+    final private static String logTag = HelloJoltJni.class.getName();
     // *************************************************************************
     // fields
 
@@ -115,7 +119,7 @@ final public class HelloJoltJni implements Runnable {
         JoltPhysicsObject.startCleaner(); // to reclaim native memory
         Jolt.registerDefaultAllocator(); // tell Jolt Physics to use malloc/free
         Jolt.installDefaultAssertCallback();
-        Jolt.installAndroidTraceCallback(Log.INFO, "jolt-jni");
+        Jolt.installAndroidTraceCallback(Log.INFO, logTag);
 
         // Create and configure the factory:
         boolean success = Jolt.newFactory();

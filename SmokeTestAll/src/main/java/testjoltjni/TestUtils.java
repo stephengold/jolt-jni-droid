@@ -77,6 +77,10 @@ final public class TestUtils {
      * instead, and Sport-Jolt assigns 1)
      */
     final public static int objLayerNonMoving = 0;
+    /**
+     * tag for log output
+     */
+    final private static String logTag = TestUtils.class.getName();
     // *************************************************************************
     // constructors
 
@@ -119,7 +123,7 @@ final public class TestUtils {
      * Initialize the loaded native library.
      */
     public static void initializeNativeLibrary() {
-        Jolt.installAndroidTraceCallback(Log.INFO, "jolt-jni");
+        Jolt.installAndroidTraceCallback(Log.INFO, logTag);
         logLibraryInfo();
 
         Jolt.setTraceAllocations(traceAllocations);
@@ -266,7 +270,7 @@ final public class TestUtils {
                 "Jolt JNI version %s-%s%s initializing%n",
                 Jolt.versionString(), Jolt.buildType(),
                 Jolt.isDoublePrecision() ? "Dp" : "Sp");
-        Log.i("jolt-jni", message);
+        Log.i(logTag, message);
     }
 
     /**
