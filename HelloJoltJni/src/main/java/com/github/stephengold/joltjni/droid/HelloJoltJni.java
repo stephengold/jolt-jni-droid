@@ -59,7 +59,8 @@ import com.github.stephengold.joltjni.readonly.RVec3Arg;
 import com.github.stephengold.joltjni.readonly.Vec3Arg;
 
 /**
- * Drop a dynamic sphere onto a horizontal surface (illustrative example).
+ * Drop a dynamic sphere onto a horizontal surface (non-graphical illustrative
+ * example).
  *
  * @author Stephen Gold sgold@sonic.net
  */
@@ -87,11 +88,11 @@ final public class HelloJoltJni implements Runnable {
     // fields
 
     /**
-     * falling rigid body
+     * body that represents a falling ball
      */
     private static ConstBody ball;
     /**
-     * system to simulate
+     * 3-D system for physics simulation
      */
     private static PhysicsSystem physicsSystem;
     // *************************************************************************
@@ -108,8 +109,7 @@ final public class HelloJoltJni implements Runnable {
     // new methods exposed
 
     /**
-     * Simulate a falling sphere and write its coordinates to the specified
-     * view.
+     * Simulate a falling sphere and write its coordinates to the activity.
      */
     @Override
     public void run() {
@@ -146,7 +146,7 @@ final public class HelloJoltJni implements Runnable {
             String textLine = String.format("%s%n", location);
             MainActivity.buffer.append(textLine);
         }
-        
+
         MainActivity.running = false;
     }
     // *************************************************************************
