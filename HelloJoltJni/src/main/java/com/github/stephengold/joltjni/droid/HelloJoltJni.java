@@ -64,7 +64,7 @@ import com.github.stephengold.joltjni.readonly.Vec3Arg;
  *
  * @author Stephen Gold sgold@sonic.net
  */
-final public class HelloJoltJni implements Runnable {
+final class HelloJoltJni implements Runnable {
     // *************************************************************************
     // constants
 
