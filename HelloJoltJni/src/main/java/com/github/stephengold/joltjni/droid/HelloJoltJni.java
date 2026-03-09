@@ -142,6 +142,8 @@ final public class HelloJoltJni implements Runnable {
             String textLine = String.format("%s%n", location);
             MainActivity.buffer.append(textLine);
         }
+        
+        MainActivity.running = false;
     }
     // *************************************************************************
     // private methods
