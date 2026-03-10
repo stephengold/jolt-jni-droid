@@ -39,8 +39,6 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
     implementation(libs.material)
-    implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
     implementation("com.github.stephengold", "jolt-jni-Android",
             libs.versions.joltjni.get(), "", "SpDebug", "aar"
     )
