@@ -19,7 +19,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
+        google() // to find libraries released to Google's Maven Repository
         mavenCentral() // to find libraries released to the Maven Central repository
         //mavenLocal() // to find libraries installed locally
     }
