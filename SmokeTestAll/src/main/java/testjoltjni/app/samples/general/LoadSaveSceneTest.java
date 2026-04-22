@@ -27,6 +27,8 @@ import com.github.stephengold.joltjni.std.*;
 import java.util.*;
 import testjoltjni.app.samples.*;
 import static com.github.stephengold.joltjni.Jolt.*;
+import static com.github.stephengold.joltjni.JphMath.*;
+import static com.github.stephengold.joltjni.MiscUtil.*;
 import static com.github.stephengold.joltjni.operator.Op.*;
 /**
  * A line-for-line Java translation of the Jolt-Physics load/save scene test.

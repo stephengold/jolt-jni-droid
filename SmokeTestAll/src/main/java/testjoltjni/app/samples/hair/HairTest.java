@@ -101,8 +101,7 @@ public void Initialize()
 	int num_vertices;
 	num_vertices=stream.readInt();
 	Float3[] vertices=new Float3[num_vertices];
-        for(int i=0;i<num_vertices;++i){vertices[i]=new Float3();}
-	stream.readBytes(vertices   );
+	stream.readFloat3Array(vertices   );
 
 	// Indices
 	int num_indices;
@@ -369,7 +368,7 @@ if(Jolt.implementsDebugRendering()){
 				mDebugRenderer.drawLine(x0, x1, color);
 				x0 = x1;
 			}
-			color =new Color((int)(Jolt.hashCombine(0, color.getUInt32())) | 0xff000000);
+			color =new Color((int)(MiscUtil.hashCombine(0, color.getUInt32())) | 0xff000000);
 		}
 		Jolt.profileEnd();
 	}
