@@ -153,7 +153,7 @@ if(implementsDebugRendering()){
 	mCharacter.setLinearVelocity(new_velocity);
 
 	// Update the character position
-	ExtendedUpdateSettings update_settings=new ExtendedUpdateSettings();
+	ConstExtendedUpdateSettings update_settings=new ExtendedUpdateSettings();
 	mCharacter.extendedUpdate(inParams.mDeltaTime,
 		gravity,
 		update_settings,

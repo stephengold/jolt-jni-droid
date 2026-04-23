@@ -59,7 +59,7 @@ int mConveyorBeltBody = cInvalidBodyId;
 int mSensorBody = cInvalidBodyId;
 CharacterVsCharacterCollisionSimple mCharacterVsCharacterCollision = new CharacterVsCharacterCollisionSimple();
 protected enum EType{Capsule,Cylinder,Box,Compound};
-private EType sShapeType = EType.Capsule;
+protected EType sShapeType=EType.Capsule;
 private float mTime;
 private RVec3 mCameraPivot = RVec3.sZero();
 private int mRotatingBody = cInvalidBodyId;
@@ -734,7 +734,7 @@ public void PrePhysicsUpdate( PreUpdateParams inParams)
 			character.setLinearVelocity(velocity);
 
 			// Move character
-			ExtendedUpdateSettings update_settings = new ExtendedUpdateSettings();
+			ConstExtendedUpdateSettings update_settings = new ExtendedUpdateSettings();
 			character.extendedUpdate(inParams.mDeltaTime,
 				mPhysicsSystem.getGravity(),
 				update_settings,
@@ -874,7 +874,7 @@ void DrawCharacterState(ConstCharacterBase inCharacter, RMat44Arg inCharacterTra
 		mDebugRenderer.drawArrow(inCharacterTransform.getTranslation(), plus(inCharacterTransform.getTranslation(), inCharacterVelocity), Color.sYellow, 0.1f);
 
 	// Draw text info
-	ConstPhysicsMaterial ground_material = inCharacter.getGroundMaterial();
+	ConstPhysicsMaterial  ground_material = inCharacter.getGroundMaterial();
 	Vec3 horizontal_velocity =new Vec3(inCharacterVelocity);
 	horizontal_velocity.setY(0);
 	mDebugRenderer.drawText3D(inCharacterTransform.getTranslation(), String.format("State: %s\nMat: %s\nHorizontal Vel: %.1f m/s\nVertical Vel: %.1f m/s", ground_state, ground_material.getDebugName(), (double)horizontal_velocity.length(), (double)inCharacterVelocity.getY()), Color.sWhite, 0.25f);

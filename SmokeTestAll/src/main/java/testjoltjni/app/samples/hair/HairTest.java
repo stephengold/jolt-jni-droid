@@ -57,8 +57,8 @@ Gradient sGridVelocityFactor=new Gradient(0.05f,0.01f);
 Gradient sHairRadius=new Gradient(0.001f,0.001f);
 Gradient sSkinGlobalPose=new Gradient(1f,0f,0f,0.1f);
 Gradient sWorldTransformInfluence=new Gradient(0f,1f);
-class Groom{Groom(){};
-    Groom(String n,BiFunction<Mat44Arg,Vec3Arg,Vec3>t,boolean a){mName=n;mVertexTransform=t;mAttachToHull=a;};
+class Groom{Groom(){}
+    Groom(String n,BiFunction<Mat44Arg,Vec3Arg,Vec3>t,boolean a){mName=n;mVertexTransform=t;mAttachToHull=a;}
     String mName;BiFunction<Mat44Arg,Vec3Arg,Vec3>mVertexTransform;boolean mAttachToHull;};
 BiFunction<Mat44Arg,Vec3Arg,Vec3> tenth_of_inch_to_m = (Mat44Arg inInvNeckTransform, Vec3Arg inVertex) -> {
     return star(inInvNeckTransform,star(2.54f/1000f,inVertex.swizzle(SWIZZLE_Y,SWIZZLE_Z,SWIZZLE_X)));};
@@ -75,7 +75,7 @@ int sDrawSimulationStrandCount=Std.INT_MAX;
 int sMaxStrands=Jolt.buildType().equals("Debug")?500:25000;
 int sNumSolverIterationsPerSecond=HairSettings.cDefaultIterationsPerSecond;
 int sOverrideVerticesPerStrand=32;
-class AttachedBody{AttachedBody(int j,int b){mJointIdx=j;mBodyID=b;};int mJointIdx;int mBodyID;};
+class AttachedBody{AttachedBody(int j,int b){mJointIdx=j;mBodyID=b;}int mJointIdx;int mBodyID;};
 List<AttachedBody>mAttachedBodies=new ArrayList<>();
 Mat44Array[] mFaceAnimation;
 
@@ -107,21 +107,18 @@ public void Initialize()
 	int num_indices;
 	num_indices=stream.readInt();
 	IndexedTriangleNoMaterial[] indices=new IndexedTriangleNoMaterial[num_indices];
-        for(int i=0;i<num_indices;++i){indices[i]=new IndexedTriangleNoMaterial();}
 	stream.readIndexedTriangles(indices   );
 
 	// Inverse Bind Matrices
 	int num_joints;
 	num_joints=stream.readInt();
 	Mat44[] inv_bind_pose=new Mat44[num_joints];
-        for(int i=0;i<num_joints;++i){inv_bind_pose[i]=new Mat44();}
 	stream.readMatrices(inv_bind_pose   );
 
 	// Skin Weights
 	int num_skin_weights_per_vertex;
 	num_skin_weights_per_vertex=stream.readInt();
 	HairSkinWeight[] skin_weights=new HairSkinWeight[num_skin_weights_per_vertex * num_vertices];
-        for(int i=0;i<skin_weights.length;++i){skin_weights[i]=new HairSkinWeight();}
 	stream.readHairSkinWeights(skin_weights   );
 
 	// Animation
