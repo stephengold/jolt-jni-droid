@@ -58,7 +58,7 @@ float mRampBlocksTimeLeft;
 int mConveyorBeltBody = cInvalidBodyId;
 int mSensorBody = cInvalidBodyId;
 CharacterVsCharacterCollisionSimple mCharacterVsCharacterCollision = new CharacterVsCharacterCollisionSimple();
-private enum EType{Capsule, Cylinder, Box};
+protected enum EType{Capsule,Cylinder,Box,Compound};
 private EType sShapeType = EType.Capsule;
 private float mTime;
 private RVec3 mCameraPivot = RVec3.sZero();
@@ -750,7 +750,7 @@ void CharacterBaseTest::CreateSettingsMenu(DebugUI *inUI, UIElement *inSubMenu)
 	inUI->CreateTextButton(inSubMenu, "Configuration Settings", [this, inUI]() {
 		UIElement *configuration_settings = inUI->CreateMenu();
 
-		inUI->CreateComboBox(configuration_settings, "Shape Type", { "Capsule", "Cylinder", "Box" }, (int)sShapeType, [](int inItem) { sShapeType = (EType)inItem; });
+		inUI->CreateComboBox(configuration_settings, "Shape Type", { "Capsule", "Cylinder", "Box", "Compound" }, (int)sShapeType, [](int inItem) { sShapeType = (EType)inItem; });
 		AddConfigurationSettings(inUI, configuration_settings);
 		inUI->CreateTextButton(configuration_settings, "Accept Changes", [this]() { RestartTest(); });
 		inUI->ShowMenu(configuration_settings);
