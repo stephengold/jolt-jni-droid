@@ -75,7 +75,7 @@ final public class SmokeTestAll implements Runnable {
      * default number of physics steps to simulate during each invocation of
      * {@code smokeTest()}
      */
-    final private int defaultNumSteps = 1;
+    final private static int defaultNumSteps = 1;
     /**
      * tag for log output
      */
