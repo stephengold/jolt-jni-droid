@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024-2025 Stephen Gold
+Copyright (c) 2024-2026 Stephen Gold
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +25,22 @@ import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 import com.github.stephengold.joltjni.enumerate.*;
 import testjoltjni.app.samples.*;
 import static com.github.stephengold.joltjni.Jolt.*;
+import static com.github.stephengold.joltjni.operator.Op.*;
 /**
  * A line-for-line Java translation of the Jolt-Physics powered-rig test.
+ * <p>
+ * Demonstrates how to use motors to drive a ragdoll to a pose.
  * <p>
  * Compare with the original by Jorrit Rouwe at
  * https://github.com/jrouwe/JoltPhysics/blob/master/Samples/Tests/Rig/PoweredRigTest.cpp
  */
 public class PoweredRigTest extends Test{
 float mTime;
+int sMotorMode;
 RagdollRef mRagdoll=new RagdollRef();
 RagdollSettingsRef mRagdollSettings=new RagdollSettingsRef();
 SkeletalAnimationRef mAnimation=new SkeletalAnimationRef();
+SkeletonPose mPrevPose=new SkeletonPose();
 SkeletonPose mPose=new SkeletonPose();
 
 final String sAnimations[] =
@@ -71,10 +76,11 @@ public void Initialize()
 	// Load animation
 	String filename = SmokeTestAll.externalize(("Assets/Human/") + sAnimationName + ".tof");
 	if (!ObjectStreamIn.sReadObject(filename, mAnimation))
-		FatalError("Could not open animation " + filename);
+		FatalError("Could not open animation");
 
 	// Initialize pose
 	mPose.setSkeleton(mRagdollSettings.getSkeleton());
+	mPrevPose.setSkeleton(mRagdollSettings.getSkeleton());
 
 	// Position ragdoll
 	mAnimation.sample(0.0f, mPose);
@@ -82,8 +88,10 @@ public void Initialize()
 	mRagdoll.setPose(mPose);
 }
 
-public void PrePhysicsUpdate(PreUpdateParams inParams)
+public void PrePhysicsUpdate( PreUpdateParams inParams)
 {
+	float prev_time = mTime;
+
 	// Update time
 	mTime += inParams.mDeltaTime;
 
@@ -94,15 +102,41 @@ public void PrePhysicsUpdate(PreUpdateParams inParams)
 	RVec3 root_offset=new RVec3();
 	JointState joint = mPose.getJoint(0);
 	joint.setTranslation ( Vec3.sZero()); // All the translation goes into the root offset
-        Quat root_rotation=new Quat();
-	mRagdoll.getRootTransform(root_offset, root_rotation);joint.setRotation(root_rotation);
+        Quat root_rotation=new Quat();mRagdoll.getRootTransform(root_offset, root_rotation);joint.setRotation(root_rotation);
 	mPose.setRootOffset(root_offset);
 	mPose.calculateJointMatrices();
-if(implementsDebugRendering())
+if (implementsDebugRendering())
 	mPose.draw(inParams.mPoseDrawSettings, mDebugRenderer);
-// JPH_DEBUG_RENDERER
+ // JPH_DEBUG_RENDERER
 
-	mRagdoll.driveToPoseUsingMotors(mPose);
+	// Sample previous pose (you can also store this, but since we can scrub back in time we need to resample)
+	mAnimation.sample(prev_time, mPrevPose);
+	mPrevPose.getJoint(0).set(joint);
+	mPrevPose.setRootOffset(root_offset);
+	mPrevPose.calculateJointMatrices();
+
+	// Measure max error to previous target pose (we drove to that last frame so that's what we should have reached now)
+	double avg_error = 0.0, max_error = 0.0;
+	for (int j = 0; j < mPose.getSkeleton().getJointCount(); ++j)
+	{
+		int constraint_index = mRagdollSettings.getConstraintIndexForBodyIndex(j);
+		if (constraint_index < 0)
+			continue;
+		TwoBodyConstraint constraint = mRagdoll.getConstraint(constraint_index);
+
+		RMat44 target = star(RMat44.sTranslation(root_offset) , mPrevPose.getJointMatrix(j));
+		RMat44 actual = star(constraint.getBody2().getCenterOfMassTransform() , constraint.getConstraintToBody2Matrix());
+		double error = (double)(minus(target.getTranslation() , actual.getTranslation())).length();
+		max_error = Math.max(max_error, error);
+		avg_error += error;
+	}
+	avg_error /= mPose.getSkeleton().getJointCount();
+	mDebugRenderer.drawText3D(root_offset, String.format("AvgErr: %.3g, MaxErr: %.3g", avg_error, max_error), Color.sWhite, 0.1f);
+
+	if (sMotorMode == 0)
+		mRagdoll.driveToPoseUsingMotors(mPose);
+	else
+		mRagdoll.driveToPoseUsingMotors(mPrevPose, mPose, inParams.mDeltaTime);
 }
 /*TODO
 

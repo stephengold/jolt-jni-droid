@@ -86,15 +86,15 @@ final public class SmokeTestAll implements Runnable {
     /**
      * compute queue shared by all test objects
      */
-    private ComputeQueue queue;
+    private static ComputeQueue queue;
     /**
      * compute system shared by all test objects
      */
-    private ComputeSystem computeSystem;
+    private static ComputeSystem computeSystem;
     /**
      * physics debug renderer shared by all test objects
      */
-    private DebugRenderer renderer;
+    private static DebugRenderer renderer;
     /**
      * directory where external data files are stored
      */
@@ -102,7 +102,7 @@ final public class SmokeTestAll implements Runnable {
     /**
      * count invocations of {@code smokeTest()}
      */
-    private int numTests;
+    private static int numTests;
     /**
      * access the application's resources
      */
@@ -110,7 +110,7 @@ final public class SmokeTestAll implements Runnable {
     /**
      * allocator shared by all physics test objects
      */
-    private TempAllocator tempAllocator;
+    private static TempAllocator tempAllocator;
     // *************************************************************************
     // constructors
 
@@ -152,8 +152,8 @@ final public class SmokeTestAll implements Runnable {
         printf(" built-in compute systems:%s%s%s%s%n",
                 Jolt.implementsComputeCpu() ? " CPU" : "",
                 Jolt.implementsComputeDx12() ? " DX12" : "",
-                Jolt.implementsComputeMtl() ? " MTL" : "",
-                Jolt.implementsComputeVk() ? " VK" : ""
+                Jolt.implementsComputeMtl() ? " Metal" : "",
+                Jolt.implementsComputeVk() ? " Vulkan" : ""
         );
 
         createSharedObjects();
@@ -234,7 +234,7 @@ final public class SmokeTestAll implements Runnable {
      * Allocate and initialize the shared DebugRenderer, TempAllocator,
      * ComputeSystem, and ComputeQueue.
      */
-    private void createSharedObjects() {
+    private static void createSharedObjects() {
         // All tests share a single DebugRenderer:
         assert Jolt.implementsDebugRendering();
         String fileName = externalize("SmokeTestAll.jor");
@@ -262,6 +262,8 @@ final public class SmokeTestAll implements Runnable {
         String systemName = rtti.getName();
         systemName = systemName.replace("ComputeSystem", "");
         systemName = systemName.replace("Impl", "");
+        systemName = systemName.replace("MTL", "Metal");
+        systemName = systemName.replace("VK", "Vulkan");
         printf("  using a %s compute system%n%n", systemName);
 
         switch (systemName) {
@@ -270,13 +272,13 @@ final public class SmokeTestAll implements Runnable {
                 ComputeSystem.hairRegisterShaders(computeSystem);
                 break;
 
-            case "MTL":
+            case "Metal":
                 // Assign a loader for Metal compute shaders:
                 Loader mtlLoader = makeLoader("/mtl/com/github/stephengold");
                 computeSystem.setShaderLoader(mtlLoader);
                 break;
 
-            case "VK":
+            case "Vulkan":
                 // Assign a loader for Vulkan compute shaders:
                 Loader vkLoader = makeLoader("/vk/com/github/stephengold");
                 computeSystem.setShaderLoader(vkLoader);
@@ -341,7 +343,7 @@ final public class SmokeTestAll implements Runnable {
      *
      * @param text the text to append (not {@code null})
      */
-    private void print(String text) {
+    private static void print(String text) {
         Log.i(logTag, "print:  " + text);
         MainActivity.buffer.append(text);
     }
@@ -353,7 +355,7 @@ final public class SmokeTestAll implements Runnable {
      * @param args the arguments corresponding to the specifiers in the format
      * string
      */
-    private void printf(String format, Object... args) {
+    private static void printf(String format, Object... args) {
         String text = String.format(format, args);
         print(text);
     }
@@ -361,7 +363,7 @@ final public class SmokeTestAll implements Runnable {
     /**
      * Append a line separator to the view.
      */
-    private void println() {
+    private static void println() {
         String lineSeparator = System.lineSeparator();
         print(lineSeparator);
     }
@@ -371,7 +373,7 @@ final public class SmokeTestAll implements Runnable {
      *
      * @param text the text to append (not {@code null})
      */
-    private void println(String text) {
+    private static void println(String text) {
         print(text);
         println();
     }
@@ -381,7 +383,7 @@ final public class SmokeTestAll implements Runnable {
      *
      * @param test the Test object to use (not {@code null})
      */
-    private void smokeTest(Test test) {
+    private static void smokeTest(Test test) {
         smokeTest(test, defaultNumSteps);
     }
 
@@ -392,7 +394,7 @@ final public class SmokeTestAll implements Runnable {
      * @param numSteps the number of physics steps to simulate (&ge;0,
      * default=defaultNumSteps)
      */
-    private void smokeTest(Test test, int numSteps) {
+    private static void smokeTest(Test test, int numSteps) {
         ++numTests;
 
         // Log the name of the test:
@@ -442,7 +444,7 @@ final public class SmokeTestAll implements Runnable {
     /**
      * Smoke test all the packages.
      */
-    private void smokeTestAll() {
+    private static void smokeTestAll() {
         // broadphase package:
         smokeTest(new BroadPhaseCastRayTest());
         smokeTest(new BroadPhaseInsertionTest());
@@ -470,7 +472,7 @@ final public class SmokeTestAll implements Runnable {
         // hair package:
         smokeTest(new HairCollisionTest());
         smokeTest(new HairGravityPreloadTest());
-        //smokeTest(new HairTest()); // takes a long time
+        //smokeTest(new HairTest()); // takes a long time to read assets
 
         smokeTestRig();
         smokeTestScaledShapes();
@@ -495,7 +497,7 @@ final public class SmokeTestAll implements Runnable {
     /**
      * Smoke test the "constraints" package.
      */
-    private void smokeTestConstraints() {
+    private static void smokeTestConstraints() {
         smokeTest(new ConeConstraintTest());
         smokeTest(new ConstraintPriorityTest());
         smokeTest(new ConstraintSingularityTest());
@@ -521,7 +523,7 @@ final public class SmokeTestAll implements Runnable {
     /**
      * Smoke test the "general" package.
      */
-    private void smokeTestGeneral() {
+    private static void smokeTestGeneral() {
         smokeTest(new ActivateDuringUpdateTest());
         smokeTest(new ActiveEdgesTest());
         smokeTest(new AllowedDOFsTest());
@@ -566,7 +568,7 @@ final public class SmokeTestAll implements Runnable {
     /**
      * Smoke test the "rig" package.
      */
-    private void smokeTestRig() {
+    private static void smokeTestRig() {
         smokeTest(new BigWorldTest());
         smokeTest(new CreateRigTest());
         smokeTest(new KinematicRigTest());
@@ -582,7 +584,7 @@ final public class SmokeTestAll implements Runnable {
     /**
      * Smoke test the "scaledshapes" package.
      */
-    private void smokeTestScaledShapes() {
+    private static void smokeTestScaledShapes() {
         smokeTest(new DynamicScaledShape());
         smokeTest(new ScaledBoxShapeTest());
         smokeTest(new ScaledCapsuleShapeTest());
@@ -603,7 +605,7 @@ final public class SmokeTestAll implements Runnable {
     /**
      * Smoke test the "shapes" package.
      */
-    private void smokeTestShapes() {
+    private static void smokeTestShapes() {
         smokeTest(new BoxShapeTest());
         smokeTest(new CapsuleShapeTest());
         smokeTest(new ConvexHullShapeTest());
@@ -627,7 +629,7 @@ final public class SmokeTestAll implements Runnable {
     /**
      * Smoke test the "softbody" package.
      */
-    private void smokeTestSoftBody() {
+    private static void smokeTestSoftBody() {
         smokeTest(new SoftBodyBendConstraintTest());
         smokeTest(new SoftBodyContactListenerTest());
         smokeTest(new SoftBodyCosseratRodConstraintTest());
