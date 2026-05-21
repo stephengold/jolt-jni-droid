@@ -23,6 +23,7 @@ package testjoltjni.app.samples.tools;
 import com.github.stephengold.joltjni.*;
 import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 import com.github.stephengold.joltjni.enumerate.*;
+import com.github.stephengold.joltjni.readonly.*;
 import testjoltjni.app.samples.*;
 import static com.github.stephengold.joltjni.JphMath.*;
 import static com.github.stephengold.joltjni.operator.Op.*;
@@ -64,7 +65,8 @@ public void Initialize()
 	StreamInWrapper wrapper=StreamInWrapper.open(SmokeTestAll.externalize(file_name), flags);
 	if (wrapper==null)
 		FatalError("Unable to open file");
-	PhysicsSceneResult result = PhysicsScene.sRestoreFromBinaryState(wrapper);
+
+        PhysicsSceneResult result = PhysicsScene.sRestoreFromBinaryState(wrapper);
 	if (result.hasError())
 		FatalError(result.getError());
 	PhysicsSceneRef scene = result.get();
@@ -81,12 +83,20 @@ public void Initialize()
 	// Determine if we are forced to override the object layers because one of the bodies has a layer number that is invalid in the context of this application
 	boolean override_layers = sOverrideLayers;
 	if (!override_layers)
-		for (BodyCreationSettings settings : scene.getBodies())
+	{
+		for ( ConstBodyCreationSettings settings : scene.getBodies())
 			if (settings.getObjectLayer() >= Layers.NUM_LAYERS)
 			{
 				override_layers = true;
 				break;
 			}
+		for ( ConstSoftBodyCreationSettings settings : scene.getSoftBodies())
+			if (settings.getObjectLayer() >= Layers.NUM_LAYERS)
+			{
+				override_layers = true;
+				break;
+			}
+	}
 
 	for (BodyCreationSettings settings : scene.getBodies())
 	{
@@ -104,15 +114,25 @@ public void Initialize()
 		settings.setRotation ( star(up_rotation , settings.getRotation()));
 	}
 
+	for (SoftBodyCreationSettings settings : scene.getSoftBodies())
+	{
+		if (override_layers)
+			settings.setObjectLayer ( Layers.MOVING);
+
+		// Rotate the body so that it matches Y is up
+		settings.setPosition ( star(RMat44.sRotation(up_rotation) , settings.getPosition()));
+		settings.setRotation ( star(up_rotation , settings.getRotation()));
+	}
+
 	scene.createBodies(mPhysicsSystem);
 }
 
 /*
-void LoadSnapshotTest.CreateSettingsMenu(DebugUI *inUI, UIElement *inSubMenu)
+void LoadSnapshotTest::CreateSettingsMenu(DebugUI *inUI, UIElement *inSubMenu)
 {
-	inUI.CreateComboBox(inSubMenu, "Up Axis", { "X", "Y", "Z" }, sUpAxis, [](int inItem) { sUpAxis = inItem; });
-	inUI.CreateCheckBox(inSubMenu, "Override Object Layers", sOverrideLayers, [](UICheckBox.EState inState) { sOverrideLayers = inState == UICheckBox.STATE_CHECKED; });
-	inUI.CreateTextButton(inSubMenu, "Accept Changes", [this]() { RestartTest(); });
+	inUI->CreateComboBox(inSubMenu, "Up Axis", { "X", "Y", "Z" }, sUpAxis, [](int inItem) { sUpAxis = inItem; });
+	inUI->CreateCheckBox(inSubMenu, "Override Object Layers", sOverrideLayers, [](UICheckBox::EState inState) { sOverrideLayers = inState == UICheckBox::STATE_CHECKED; });
+	inUI->CreateTextButton(inSubMenu, "Accept Changes", [this]() { RestartTest(); });
 }
 */
 }

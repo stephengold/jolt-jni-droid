@@ -57,6 +57,7 @@ boolean mAllowSliding = false;
 RVec3 GetCharacterPosition(){return mCharacter.getPosition();}
 
 CharacterContactListener contactListener=new CustomCharacterContactListener() {
+    @Override
     public void onAdjustBodyVelocity(long characterVa, long body2Va, float[] velocities) {
         ConstCharacterVirtual inCharacter = new CharacterVirtual(characterVa, mPhysicsSystem);
         ConstBody body2 = new Body(body2Va);
@@ -67,55 +68,45 @@ CharacterContactListener contactListener=new CustomCharacterContactListener() {
         ioLinearVelocities.copyTo(velocities);
         ioAngularVelocities.copyTo(velocities, 3);
     }
-    public void onCharacterContactAdded(long characterVa, long otherCharacterVa, int subShapeId2, double contactLocationX,
-            double contactLocationY, double contactLocationZ, float contactNormalX, float contactNormalY, float contactNormalZ,
-            long settingsVa) {
+    @Override
+    public void onCharacterContactAdded(long characterVa, long contactVa, long settingsVa) {
         ConstCharacterVirtual inCharacter = new CharacterVirtual(characterVa, mPhysicsSystem);
-        ConstCharacterVirtual inOtherCharacter = new CharacterVirtual(otherCharacterVa, mPhysicsSystem);
-        RVec3Arg inContactPosition = new RVec3(contactLocationX, contactLocationY, contactLocationZ);
-        Vec3Arg inContactNormal = new Vec3(contactNormalX, contactNormalY, contactNormalZ);
+        ConstCharacterContact inContact = new CharacterContact(contactVa, false, mPhysicsSystem);
         CharacterContactSettings ioSettings = new CharacterContactSettings(settingsVa);
-        CharacterVirtualTest.this.OnCharacterContactAdded(
-                inCharacter, inOtherCharacter, subShapeId2, inContactPosition, inContactNormal, ioSettings);
+        CharacterVirtualTest.this.OnCharacterContactAdded(inCharacter, inContact, ioSettings);
     }
-    public void onCharacterContactPersisted(long characterVa, long otherCharacterVa, int subShapeId2, double contactLocationX,
-            double contactLocationY, double contactLocationZ, float contactNormalX, float contactNormalY, float contactNormalZ,
-            long settingsVa) {
+    @Override
+    public void onCharacterContactPersisted(long characterVa, long contactVa, long settingsVa) {
         ConstCharacterVirtual inCharacter = new CharacterVirtual(characterVa, mPhysicsSystem);
-        ConstCharacterVirtual inOtherCharacter = new CharacterVirtual(otherCharacterVa, mPhysicsSystem);
-        RVec3Arg inContactPosition = new RVec3(contactLocationX, contactLocationY, contactLocationZ);
-        Vec3Arg inContactNormal = new Vec3(contactNormalX, contactNormalY, contactNormalZ);
+        ConstCharacterContact inContact = new CharacterContact(contactVa, false, mPhysicsSystem);
         CharacterContactSettings ioSettings = new CharacterContactSettings(settingsVa);
-        CharacterVirtualTest.this.OnCharacterContactPersisted(
-                inCharacter, inOtherCharacter, subShapeId2, inContactPosition, inContactNormal, ioSettings);
+        CharacterVirtualTest.this.OnCharacterContactPersisted(inCharacter, inContact, ioSettings);
     }
+    @Override
     public void onCharacterContactRemoved(long characterVa, int otherCharacterId, int subShapeId2) {
         ConstCharacterVirtual inCharacter = new CharacterVirtual(characterVa, mPhysicsSystem);
         CharacterVirtualTest.this.OnCharacterContactRemoved(inCharacter, otherCharacterId, subShapeId2);
     }
-    public void onContactAdded(long characterVa, int bodyId2, int subShapeId2, double contactLocationX, double contactLocationY,
-	    double contactLocationZ, float contactNormalX, float contactNormalY, float contactNormalZ, long settingsVa) {
+    @Override
+    public void onContactAdded(long characterVa, long contactVa, long settingsVa) {
         ConstCharacterVirtual inCharacter = new CharacterVirtual(characterVa, mPhysicsSystem);
-	RVec3Arg inContactPosition = new RVec3(contactLocationX, contactLocationY, contactLocationZ);
-	Vec3Arg inContactNormal = new Vec3(contactNormalX, contactNormalY, contactNormalZ);
+        ConstCharacterContact inContact = new CharacterContact(contactVa, false, mPhysicsSystem);
         CharacterContactSettings ioSettings = new CharacterContactSettings(settingsVa);
-	CharacterVirtualTest.this.OnContactAdded(
-                inCharacter, bodyId2, subShapeId2, inContactPosition, inContactNormal, ioSettings);
+	CharacterVirtualTest.this.OnContactAdded(inCharacter, inContact, ioSettings);
     }
-    public void onContactPersisted(long characterVa, int bodyId2, int subShapeId2, double contactLocationX,
-            double contactLocationY, double contactLocationZ, float contactNormalX, float contactNormalY, float contactNormalZ,
-            long settingsVa) {
+    @Override
+    public void onContactPersisted(long characterVa, long contactVa, long settingsVa) {
         ConstCharacterVirtual inCharacter = new CharacterVirtual(characterVa, mPhysicsSystem);
-	RVec3Arg inContactPosition = new RVec3(contactLocationX, contactLocationY, contactLocationZ);
-	Vec3Arg inContactNormal = new Vec3(contactNormalX, contactNormalY, contactNormalZ);
+        ConstCharacterContact inContact = new CharacterContact(contactVa, false, mPhysicsSystem);
         CharacterContactSettings ioSettings = new CharacterContactSettings(settingsVa);
-        CharacterVirtualTest.this.OnContactPersisted(
-                inCharacter, bodyId2, subShapeId2, inContactPosition, inContactNormal, ioSettings);
+        CharacterVirtualTest.this.OnContactPersisted(inCharacter, inContact, ioSettings);
     }
+    @Override
     public void onContactRemoved(long characterVa, int bodyId2, int subShapeId2) {
         ConstCharacterVirtual inCharacter = new CharacterVirtual(characterVa, mPhysicsSystem);
         CharacterVirtualTest.this.OnContactRemoved(inCharacter, bodyId2, subShapeId2);
     }
+    @Override
     public void onContactSolve(long characterVa, int bodyId2, int subShapeId2, double contactLocationX, double contactLocationY,
 	    double contactLocationZ, float contactNormalX, float contactNormalY, float contactNormalZ, float contactVelocityX,
 	    float contactVelocityY, float contactVelocityZ, long materialVa, float characterVelocityX, float characterVelocityY,
@@ -131,7 +122,13 @@ CharacterContactListener contactListener=new CustomCharacterContactListener() {
                 inCharacter, bodyId2, subShapeId2, inContactPosition, inContactNormal,
                  inContactVelocity, inContactMaterial, inCharacterVelocity, newVel);
         newVel.copyTo(newCharacterVelocity);
-	}
+    }
+    @Override
+    public boolean onContactValidate(long characterVa, long contactVa) {
+        ConstCharacterVirtual inCharacter = new CharacterVirtual(characterVa, mPhysicsSystem);
+        ConstCharacterContact inContact = new CharacterContact(contactVa, false, mPhysicsSystem);
+        return CharacterVirtualTest.this.OnContactValidate(inCharacter, inContact);
+    }
 };
 
 public void Initialize()
@@ -207,7 +204,7 @@ if(implementsDebugRendering()){
 	// as the character only reports contacts as it is sliding through the world. If 2 sub shapes hit at the same time then
 	// most likely only one will be reported as it stops the character and prevents the 2nd one from being seen.
 	int num_contacts = 0;
-	for (ConstContact c : mCharacter.getActiveContacts())
+	for (ConstCharacterContact  c : mCharacter.getActiveContacts())
 		if (c.getHadCollision())
 		{
 			assert mActiveContacts.find(c) != -1;
@@ -304,9 +301,9 @@ void HandleInput(Vec3Arg inMovementDirection, boolean inJump, boolean inSwitchSt
 
 void CharacterVirtualTest::AddCharacterMovementSettings(DebugUI* inUI, UIElement* inSubMenu)
 {
-	inUI->CreateCheckBox(inSubMenu, "Enable Character Inertia", sEnableCharacterInertia, [](UICheckBox.EState inState) { sEnableCharacterInertia = inState == UICheckBox.STATE_CHECKED; });
-	inUI->CreateCheckBox(inSubMenu, "Player Can Push Other Virtual Characters", sPlayerCanPushOtherCharacters, [](UICheckBox.EState inState) { sPlayerCanPushOtherCharacters = inState == UICheckBox.STATE_CHECKED; });
-	inUI->CreateCheckBox(inSubMenu, "Other Virtual Characters Can Push Player", sOtherCharactersCanPushPlayer, [](UICheckBox.EState inState) { sOtherCharactersCanPushPlayer = inState == UICheckBox.STATE_CHECKED; });
+	inUI->CreateCheckBox(inSubMenu, "Enable Character Inertia", sEnableCharacterInertia, [](UICheckBox::EState inState) { sEnableCharacterInertia = inState == UICheckBox::STATE_CHECKED; });
+	inUI->CreateCheckBox(inSubMenu, "Player Can Push Other Virtual Characters", sPlayerCanPushOtherCharacters, [](UICheckBox::EState inState) { sPlayerCanPushOtherCharacters = inState == UICheckBox::STATE_CHECKED; });
+	inUI->CreateCheckBox(inSubMenu, "Other Virtual Characters Can Push Player", sOtherCharactersCanPushPlayer, [](UICheckBox::EState inState) { sOtherCharactersCanPushPlayer = inState == UICheckBox::STATE_CHECKED; });
 }
 
 void CharacterVirtualTest::AddConfigurationSettings(DebugUI *inUI, UIElement *inSubMenu)
@@ -358,6 +355,15 @@ public void RestoreState(StateRecorder inStream)
 	inStream.read(mActiveContacts);
 }
 
+boolean OnContactValidate( ConstCharacterVirtual inCharacter,  ConstCharacterContact inContact)
+{
+	// Only accept back facing contacts if the surface normal (which was flipped) points outside of a cone of 30 degrees from the up axis (to prevent being able to stand on upside down faces)
+	// This prevents us from sticking on the bottom plane of the 'steep slope and an acute angle with triangles that face downwards'
+	// (but you can use a different condition like tagging materials to indicate which ones are double sided)
+	return !inContact.getIsBackFacingContact()
+		|| inContact.getSurfaceNormal().dot(inCharacter.getUp()) < 0.866025f;
+}
+
 void OnAdjustBodyVelocity( ConstCharacterVirtual inCharacter, ConstBody inBody2, Vec3 ioLinearVelocity, Vec3 ioAngularVelocity)
 {
 	// Apply artificial velocity to the character when standing on the conveyor belt
@@ -365,17 +371,17 @@ void OnAdjustBodyVelocity( ConstCharacterVirtual inCharacter, ConstBody inBody2,
 		plusEquals(ioLinearVelocity ,new Vec3(0, 0, 2));
 }
 
-void OnContactCommon( ConstCharacterVirtual inCharacter, int  inBodyID2, int  inSubShapeID2, RVec3Arg inContactPosition, Vec3Arg inContactNormal, CharacterContactSettings ioSettings)
+void OnContactCommon( ConstCharacterVirtual inCharacter,  ConstCharacterContact inContact, CharacterContactSettings ioSettings)
 {
 	// Draw a box around the character when it enters the sensor
-	if (inBodyID2 == mSensorBody)
+	if (inContact.getBodyB() == mSensorBody)
 	{
 		AaBox box = inCharacter.getShape().getWorldSpaceBounds(inCharacter.getCenterOfMassTransform(), Vec3.sReplicate(1.0f));
 		mDebugRenderer.drawBox(box, Color.sGreen, ECastShadow.Off, EDrawMode.Wireframe);
 	}
 
 	// Dynamic boxes on the ramp go through all permutations
-	int i = mRampBlocks.find(inBodyID2);
+	int i = mRampBlocks.find(inContact.getBodyB());
 	if (i != mRampBlocks.size())
 	{
 		int index = i  ;
@@ -386,36 +392,35 @@ void OnContactCommon( ConstCharacterVirtual inCharacter, int  inBodyID2, int  in
 	// If we encounter an object that can push the player, enable sliding
 	if (inCharacter.getId() == mCharacter.getId()
 		&& ioSettings.getCanPushCharacter()
-		&& mPhysicsSystem.getBodyInterface().getMotionType(inBodyID2) != EMotionType.Static)
+		&& inContact.getMotionTypeB() != EMotionType.Static)
 		mAllowSliding = true;
 }
 
-void OnContactAdded( ConstCharacterVirtual inCharacter, int  inBodyID2, int  inSubShapeID2, RVec3Arg inContactPosition, Vec3Arg inContactNormal, CharacterContactSettings ioSettings)
+void OnContactAdded( ConstCharacterVirtual inCharacter,  ConstCharacterContact inContact, CharacterContactSettings ioSettings)
 {
-	OnContactCommon(inCharacter, inBodyID2, inSubShapeID2, inContactPosition, inContactNormal, ioSettings);
+	OnContactCommon(inCharacter, inContact, ioSettings);
 
 	if (inCharacter.getId() == mCharacter.getId())
 	{
 //	#ifdef CHARACTER_TRACE_CONTACTS
-		Trace("Contact added with body %08x, sub shape %08x", inBodyID2, inSubShapeID2);
+		Trace("Contact added with body %08x, sub shape %08x", inContact.getBodyB(), inContact.getSubShapeIdB());
 //	#endif
-		ContactKey c=new ContactKey('b',inBodyID2, inSubShapeID2);
-		if (mActiveContacts.find(  c) != -1)
+		if (mActiveContacts.find(  inContact) != -1)
 			FatalError("Got an add contact that should have been a persisted contact");
-		mActiveContacts.pushBack(c);
+		mActiveContacts.pushBack(inContact);
 	}
 }
 
-void OnContactPersisted( ConstCharacterVirtual inCharacter,  int inBodyID2,  int inSubShapeID2, RVec3Arg inContactPosition, Vec3Arg inContactNormal, CharacterContactSettings ioSettings)
+void OnContactPersisted( ConstCharacterVirtual inCharacter,  ConstCharacterContact inContact, CharacterContactSettings ioSettings)
 {
-	OnContactCommon(inCharacter, inBodyID2, inSubShapeID2, inContactPosition, inContactNormal, ioSettings);
+	OnContactCommon(inCharacter, inContact, ioSettings);
 
 	if (inCharacter.getId() == mCharacter.getId())
 	{
 	//#ifdef CHARACTER_TRACE_CONTACTS
-		Trace("Contact persisted with body %08x, sub shape %08x", inBodyID2, inSubShapeID2);
+		Trace("Contact persisted with body %08x, sub shape %08x", inContact.getBodyB(), inContact.getSubShapeIdB());
 	//#endif
-		if (mActiveContacts.find( new ContactKey('b',inBodyID2, inSubShapeID2)) == -1)
+		if (mActiveContacts.find(  inContact) == -1)
 			FatalError("Got a persisted contact that should have been an add contact");
 	}
 }
@@ -427,18 +432,18 @@ void OnContactRemoved( ConstCharacterVirtual inCharacter,  int inBodyID2,  int i
 	//#ifdef CHARACTER_TRACE_CONTACTS
 		Trace("Contact removed with body %08x, sub shape %08x", inBodyID2, inSubShapeID2);
 	//#endif
-		int it = mActiveContacts.find( new ContactKey('b',inBodyID2, inSubShapeID2));
+		int it = mActiveContacts.find( new CharacterContactKey('b',inBodyID2, inSubShapeID2));
 		if (it == -1)
 			FatalError("Got a remove contact that has not been added");
 		mActiveContacts.erase(it);
 	}
 }
 
-void OnCharacterContactCommon(ConstCharacterVirtual  inCharacter, ConstCharacterVirtual  inOtherCharacter,  int inSubShapeID2, RVec3Arg inContactPosition, Vec3Arg inContactNormal, CharacterContactSettings ioSettings)
+void OnCharacterContactCommon(ConstCharacterVirtual  inCharacter, ConstCharacterContact  inContact, CharacterContactSettings ioSettings)
 {
 	// Characters can only be pushed in their own update
 	if (sPlayerCanPushOtherCharacters)
-		ioSettings.setCanPushCharacter ( sOtherCharactersCanPushPlayer || inCharacter.getId() == mCharacter.getId());
+		ioSettings.setCanPushCharacter ( sOtherCharactersCanPushPlayer || inContact.getCharacterB().getId() == mCharacter.getId());
 	else if (sOtherCharactersCanPushPlayer)
 		ioSettings.setCanPushCharacter ( inCharacter == mCharacter.getPtr());
 	else
@@ -449,32 +454,31 @@ void OnCharacterContactCommon(ConstCharacterVirtual  inCharacter, ConstCharacter
 		mAllowSliding = true;
 }
 
-void OnCharacterContactAdded( ConstCharacterVirtual inCharacter, ConstCharacterVirtual inOtherCharacter, int inSubShapeID2, RVec3Arg inContactPosition, Vec3Arg inContactNormal, CharacterContactSettings ioSettings)
+void OnCharacterContactAdded( ConstCharacterVirtual inCharacter, ConstCharacterContact  inContact, CharacterContactSettings ioSettings)
 {
-	OnCharacterContactCommon(inCharacter, inOtherCharacter, inSubShapeID2, inContactPosition, inContactNormal, ioSettings);
+	OnCharacterContactCommon(inCharacter, inContact, ioSettings);
 
 	if (inCharacter.getId() == mCharacter.getId())
 	{
 	//#ifdef CHARACTER_TRACE_CONTACTS
-		Trace("Contact added with character %08x, sub shape %08x", inOtherCharacter.getId(), inSubShapeID2);
+		Trace("Contact added with character %08x, sub shape %08x", inContact.getBodyB(), inContact.getSubShapeIdB());
 	//#endif
-		ContactKey c=new ContactKey('c', inOtherCharacter.getId(), inSubShapeID2);
-		if (mActiveContacts.find( c) != -1)
+		if (mActiveContacts.find(  inContact) != -1)
 			FatalError("Got an add contact that should have been a persisted contact");
-		mActiveContacts.pushBack(c);
+		mActiveContacts.pushBack(inContact);
 	}
 }
 
-void OnCharacterContactPersisted(ConstCharacterVirtual inCharacter, ConstCharacterVirtual inOtherCharacter,  int inSubShapeID2, RVec3Arg inContactPosition, Vec3Arg inContactNormal, CharacterContactSettings ioSettings)
+void OnCharacterContactPersisted(ConstCharacterVirtual  inCharacter, ConstCharacterContact  inContact, CharacterContactSettings ioSettings)
 {
-	OnCharacterContactCommon(inCharacter, inOtherCharacter, inSubShapeID2, inContactPosition, inContactNormal, ioSettings);
+	OnCharacterContactCommon(inCharacter, inContact, ioSettings);
 
 	if (inCharacter.getId() == mCharacter.getId())
 	{
 	//#ifdef CHARACTER_TRACE_CONTACTS
-		Trace("Contact persisted with character %08x, sub shape %08x", inOtherCharacter.getId(), inSubShapeID2);
+		Trace("Contact persisted with character %08x, sub shape %08x", inContact.getBodyB(), inContact.getSubShapeIdB());
 	//#endif
-		if (mActiveContacts.find(new ContactKey('c',inOtherCharacter.getId(), inSubShapeID2)) == -1)
+		if (mActiveContacts.find(  inContact) == -1)
 			FatalError("Got a persisted contact that should have been an add contact");
 	}
 }
@@ -486,7 +490,7 @@ void OnCharacterContactRemoved(ConstCharacterVirtual inCharacter,  int inOtherCh
 	//#ifdef CHARACTER_TRACE_CONTACTS
 		Trace("Contact removed with character %08x, sub shape %08x", inOtherCharacterID, inSubShapeID2);
 	//#endif
-		int it = mActiveContacts.find( new ContactKey('c',inOtherCharacterID, inSubShapeID2));
+		int it = mActiveContacts.find( new CharacterContactKey('c',inOtherCharacterID, inSubShapeID2));
 		if (it == -1)
 			FatalError("Got a remove contact that has not been added");
 		mActiveContacts.erase(it);
