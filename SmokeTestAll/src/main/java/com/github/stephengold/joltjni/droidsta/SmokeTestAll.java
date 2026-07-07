@@ -148,6 +148,7 @@ final public class SmokeTestAll implements Runnable {
         System.loadLibrary("joltjni");
         TestUtils.initializeNativeLibrary();
 
+        // Log the configuration:
         println(Jolt.getConfigurationString());
         printf(" built-in compute systems:%s%s%s%s%n",
                 Jolt.implementsComputeCpu() ? " CPU" : "",
@@ -288,7 +289,7 @@ final public class SmokeTestAll implements Runnable {
                 break;
 
             default:
-                throw new RuntimeException("typeName = " + systemName);
+                throw new RuntimeException("systemName = " + systemName);
         }
 
         // All tests share a single ComputeQueue:
@@ -382,7 +383,8 @@ final public class SmokeTestAll implements Runnable {
     }
 
     /**
-     * Invoke key methods of the specified Test to see whether they crash.
+     * Invoke key methods of the specified Test (with no test settings) to see
+     * whether they crash.
      *
      * @param test the Test object to use (not {@code null})
      */
@@ -400,7 +402,7 @@ final public class SmokeTestAll implements Runnable {
     private static void smokeTest(Test test, int numSteps) {
         ++numTests;
 
-        // Log the name of the test:
+        // Describe the test to System.out:
         String testName = test.getClass().getSimpleName();
         printf("=== Test #%d:  %s for %d step%s%n",
                 numTests, testName, numSteps, (numSteps == 1) ? "" : "s");
@@ -426,7 +428,7 @@ final public class SmokeTestAll implements Runnable {
         test.Initialize();
 
         // Single-step the physics numSteps times:
-        for (int i = 0; i < numSteps; ++i) {
+        for (int stepIndex = 1; stepIndex <= numSteps; ++stepIndex) {
             PreUpdateParams params = new PreUpdateParams();
             params.mDeltaTime = 1f / 60;
             test.PrePhysicsUpdate(params);
