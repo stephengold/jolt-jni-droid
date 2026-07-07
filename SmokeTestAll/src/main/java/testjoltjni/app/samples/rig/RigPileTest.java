@@ -73,7 +73,7 @@ public void Initialize()
 	{
 		// Load scene
 		PhysicsSceneRef scene=new PhysicsSceneRef();
-		if (!ObjectStreamIn.sReadObject((String)("Assets/") + sSceneName.toLowerCase() + ".bof", scene))
+		if (!ObjectStreamIn.sReadObject(SmokeTestAll.externalize("Assets/" + sSceneName.toLowerCase() + ".bof"), scene))
 			FatalError("Failed to load scene");
 		for (BodyCreationSettings body : scene.getBodies())
 			body.setObjectLayer ( Layers.NON_MOVING);

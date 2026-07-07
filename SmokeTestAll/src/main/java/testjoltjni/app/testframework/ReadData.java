@@ -24,6 +24,7 @@ package testjoltjni.app.testframework;
 import java.io.*;
 import java.nio.ByteBuffer;
 import com.github.stephengold.joltjni.Jolt;
+import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 
 /**
  * A Java translation of the Jolt-Physics {@code ReadData} utility.
@@ -40,6 +41,7 @@ public class ReadData {
      * @return a new, flipped, direct buffer containing file content
      */
     public static ByteBuffer ReadData(String inFileName) {
+        inFileName = SmokeTestAll.externalize(inFileName);
         int numBytes = 0;
         try (InputStream byteStream = new FileInputStream(inFileName); DataInputStream dataStream = new DataInputStream(byteStream)) {
             while (true) {

@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package testjoltjni.app.samples.vehicle;
 import com.github.stephengold.joltjni.*;
+import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 import com.github.stephengold.joltjni.enumerate.*;
 import com.github.stephengold.joltjni.readonly.*;
 import com.github.stephengold.joltjni.std.*;
@@ -182,7 +183,7 @@ public void Initialize()
 	{
 		// Load scene
 		PhysicsSceneRef scene=new PhysicsSceneRef();
-		if (!ObjectStreamIn.sReadObject("Assets/" + sSceneName.toLowerCase() + ".bof", scene))
+		if (!ObjectStreamIn.sReadObject(SmokeTestAll.externalize("Assets/" + sSceneName.toLowerCase() + ".bof"), scene))
 			FatalError("Failed to load scene");
 		for (BodyCreationSettings body : scene.getBodies())
 			body.setObjectLayer(Layers.NON_MOVING);

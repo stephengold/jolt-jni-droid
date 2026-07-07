@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package testjoltjni.app.samples.general;
 import com.github.stephengold.joltjni.*;
+import com.github.stephengold.joltjni.droidsta.SmokeTestAll;
 import com.github.stephengold.joltjni.enumerate.*;
 import com.github.stephengold.joltjni.readonly.*;
 import com.github.stephengold.joltjni.std.*;
@@ -343,7 +344,7 @@ void CreateConvexOnTerrain1()
 if (supportsObjectStream()) {
 	// Load scene
 	PhysicsSceneRef scene=new PhysicsSceneRef();
-	if (!ObjectStreamIn.sReadObject("Assets/terrain1.bof", scene))
+	if (!ObjectStreamIn.sReadObject(SmokeTestAll.externalize("Assets/terrain1.bof"), scene))
 		FatalError("Failed to load scene");
 	for (BodyCreationSettings body : scene.getBodies())
 		body.setObjectLayer ( Layers.NON_MOVING);
