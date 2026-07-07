@@ -428,7 +428,7 @@ final public class SmokeTestAll implements Runnable {
         // Single-step the physics numSteps times:
         for (int i = 0; i < numSteps; ++i) {
             PreUpdateParams params = new PreUpdateParams();
-            params.mDeltaTime = 0.02f;
+            params.mDeltaTime = 1f / 60;
             test.PrePhysicsUpdate(params);
 
             int collisionSteps = 1;
