@@ -42,6 +42,7 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import testjoltjni.TestUtils;
 import testjoltjni.app.samples.BPLayerInterfaceImpl;
+import testjoltjni.app.samples.EConstraintOverride;
 import testjoltjni.app.samples.ObjectLayerPairFilterImpl;
 import testjoltjni.app.samples.ObjectVsBroadPhaseLayerFilterImpl;
 import testjoltjni.app.samples.PreUpdateParams;
@@ -389,23 +390,42 @@ final public class SmokeTestAll implements Runnable {
      * @param test the Test object to use (not {@code null})
      */
     private static void smokeTest(Test test) {
-        smokeTest(test, defaultNumSteps);
+        String arguments = null;
+        smokeTest(test, arguments);
     }
 
     /**
-     * Invoke key methods of the specified Test to see whether they crash.
+     * Invoke key methods of the specified Test (with the specified settings) to
+     * see whether they crash.
      *
      * @param test the Test object to use (not {@code null})
+     * @param settings a textual description of the test settings, or
+     * {@code null} for none
+     */
+    private static void smokeTest(Test test, String settings) {
+        smokeTest(test, settings, defaultNumSteps);
+    }
+
+    /**
+     * Invoke key methods of the specified Test (with the specified settings) to
+     * see whether they crash.
+     *
+     * @param test the Test object to use (not {@code null})
+     * @param settings a textual description of the test settings, or
+     * {@code null} for none
      * @param numSteps the number of physics steps to simulate (&ge;0,
      * default=defaultNumSteps)
      */
-    private static void smokeTest(Test test, int numSteps) {
+    private static void smokeTest(Test test, String settings, int numSteps) {
         ++numTests;
 
         // Describe the test to System.out:
-        String testName = test.getClass().getSimpleName();
+        String description = test.getClass().getSimpleName();
+        if (settings != null && !settings.isBlank()) {
+            description += " with " + settings;
+        }
         printf("=== Test #%d:  %s for %d step%s%n",
-                numTests, testName, numSteps, (numSteps == 1) ? "" : "s");
+                numTests, description, numSteps, (numSteps == 1) ? "" : "s");
 
         test.SetDebugRenderer(renderer);
         test.SetTempAllocator(tempAllocator);
@@ -454,13 +474,7 @@ final public class SmokeTestAll implements Runnable {
         smokeTest(new BroadPhaseCastRayTest());
         smokeTest(new BroadPhaseInsertionTest());
 
-        // character package:
-        smokeTest(new CharacterPlanetTest());
-        smokeTest(new CharacterSpaceShipTest());
-        smokeTest(new CharacterTest());
-        smokeTest(new CharacterVirtualTest());
-
-        // constraints package:
+        smokeTestCharacter();
         smokeTestConstraints();
 
         // convex-collision package:
@@ -473,12 +487,7 @@ final public class SmokeTestAll implements Runnable {
         // TODO RandomRayTest (uses templates)
 
         smokeTestGeneral();
-
-        // hair package:
-        smokeTest(new HairCollisionTest());
-        smokeTest(new HairGravityPreloadTest());
-        //smokeTest(new HairTest()); // takes a long time to read assets
-
+        smokeTestHair();
         smokeTestRig();
         smokeTestScaledShapes();
         smokeTestShapes();
@@ -487,16 +496,39 @@ final public class SmokeTestAll implements Runnable {
         // tools package:
         smokeTest(new LoadSnapshotTest());
 
-        // vehicle package:
-        smokeTest(new MotorcycleTest());
-        smokeTest(new TankTest());
-        smokeTest(new VehicleConstraintTest());
-        smokeTest(new VehicleSixDOFTest());
-        smokeTest(new VehicleStressTest());
+        smokeTestVehicle();
 
         // water package:
         smokeTest(new BoatTest());
         smokeTest(new WaterShapeTest());
+    }
+
+    /**
+     * Smoke test the "character" package.
+     */
+    private static void smokeTestCharacter() {
+        smokeTest(new CharacterPlanetTest());
+        smokeTest(new CharacterSpaceShipTest());
+
+        for (CharacterBaseTest.EType shape : CharacterBaseTest.EType.values()) {
+            for (String scene : CharacterBaseTest.sScenes) {
+                String settings = "shape=" + shape + " scene=" + scene;
+
+                CharacterTest test = new CharacterTest();
+                test.sShapeType = shape;
+                test.sSceneName = scene;
+                smokeTest(test, settings);
+
+                if (!scene.equals("InitiallyIntersecting")) { // avoid SIGSEGVs
+                    // CollideAABox() on macOS or Linux
+                    // ShouldCollide() or sCastShapeVsShapeLocalSpace() on Linux
+                    CharacterVirtualTest cvTest = new CharacterVirtualTest();
+                    cvTest.sShapeType = shape;
+                    cvTest.sSceneName = scene;
+                    smokeTest(cvTest, settings);
+                }
+            }
+        }
     }
 
     /**
@@ -550,7 +582,15 @@ final public class SmokeTestAll implements Runnable {
         smokeTest(new GravityFactorTest());
         smokeTest(new GyroscopicForceTest());
         smokeTest(new HeavyOnLightTest());
-        smokeTest(new HighSpeedTest());
+
+        for (int sceneI = 0; sceneI < HighSpeedTest.sScenes.length; ++sceneI) {
+            String settings = "scene=" + HighSpeedTest.sScenes[sceneI];
+
+            HighSpeedTest test = new HighSpeedTest();
+            test.sSelectedScene = sceneI;
+            smokeTest(test, settings);
+        }
+
         smokeTest(new IslandTest());
         smokeTest(new KinematicTest());
         smokeTest(new LoadSaveBinaryTest());
@@ -571,17 +611,70 @@ final public class SmokeTestAll implements Runnable {
     }
 
     /**
+     * Smoke test the "hair" package.
+     */
+    private static void smokeTestHair() {
+        smokeTest(new HairCollisionTest());
+
+        for (String scene : HairGravityPreloadTest.sScenes) {
+            String settings = "scene=" + scene;
+
+            HairGravityPreloadTest test = new HairGravityPreloadTest();
+            test.sSceneName = scene;
+            smokeTest(test, settings);
+        }
+
+        //smokeTest(new HairTest()); // takes a long time to read assets
+    }
+
+    /**
      * Smoke test the "rig" package.
      */
     private static void smokeTestRig() {
         smokeTest(new BigWorldTest());
         smokeTest(new CreateRigTest());
-        smokeTest(new KinematicRigTest());
-        smokeTest(new LoadRigTest());
+
+        for (String animation : KinematicRigTest.sAnimations) {
+            String settings = "animation=" + animation;
+
+            KinematicRigTest test = new KinematicRigTest();
+            test.sAnimationName = animation;
+            smokeTest(test, settings);
+        }
+
+        for (EConstraintOverride override : EConstraintOverride.values()) {
+            if (override == EConstraintOverride.TypeSlider) {
+                continue; // native assert in CalculateConstraintProperties()
+            }
+            String settings = "override=" + override;
+
+            LoadRigTest test = new LoadRigTest();
+            test.sConstraintType = override;
+            smokeTest(test, settings);
+        }
+
         smokeTest(new LoadSaveBinaryRigTest());
         smokeTest(new LoadSaveRigTest());
-        smokeTest(new PoweredRigTest());
-        smokeTest(new RigPileTest());
+
+        for (String animation : PoweredRigTest.sAnimations) {
+            if (animation.equals("dead_pose3")) {
+                continue; // issue #2059
+            }
+            String settings = "animation=" + animation;
+
+            PoweredRigTest test = new PoweredRigTest();
+            test.sAnimationName = animation;
+            smokeTest(test, settings);
+        }
+
+        for (String scene : RigPileTest.sScenes) {
+            String settings = "scene=" + scene;
+
+            RigPileTest test = new RigPileTest();
+            test.sSceneName = scene;
+            smokeTest(test, settings);
+        }
+
         smokeTest(new SkeletonMapperTest());
         smokeTest(new SoftKeyframedRigTest());
     }
@@ -617,7 +710,16 @@ final public class SmokeTestAll implements Runnable {
         smokeTest(new CylinderShapeTest());
         smokeTest(new DeformedHeightFieldShapeTest());
         smokeTest(new EmptyShapeTest());
-        smokeTest(new HeightFieldShapeTest());
+
+        for (int tt = 0; tt < HeightFieldShapeTest.sTerrainTypes.length; ++tt) {
+            String terrain = HeightFieldShapeTest.sTerrainTypes[tt];
+            String settings = "terrain=" + terrain;
+
+            HeightFieldShapeTest test = new HeightFieldShapeTest();
+            test.sTerrainType = tt;
+            smokeTest(test, settings);
+        }
+
         smokeTest(new MeshShapeTest());
         smokeTest(new MeshShapeUserDataTest());
         smokeTest(new MutableCompoundShapeTest());
@@ -649,9 +751,46 @@ final public class SmokeTestAll implements Runnable {
         smokeTest(new SoftBodySensorTest());
         smokeTest(new SoftBodyShapesTest());
         smokeTest(new SoftBodySkinnedConstraintTest());
-        smokeTest(new SoftBodyStressTest());
+
+        for (String scene : SoftBodyStressTest.sScenes) {
+            String settings = "scene=" + scene;
+
+            SoftBodyStressTest test = new SoftBodyStressTest();
+            test.sSceneName = scene;
+            smokeTest(test, settings);
+        }
+
         smokeTest(new SoftBodyUpdatePositionTest());
         smokeTest(new SoftBodyVertexRadiusTest());
         smokeTest(new SoftBodyVsFastMovingTest());
+    }
+
+    /**
+     * Smoke test the "vehicle" package.
+     */
+    private static void smokeTestVehicle() {
+        for (String scene : VehicleTest.sScenes) {
+            String settings = "scene=" + scene;
+
+            MotorcycleTest mcTest = new MotorcycleTest();
+            mcTest.sSceneName = scene;
+            smokeTest(mcTest, settings);
+
+            TankTest tankTest = new TankTest();
+            tankTest.sSceneName = scene;
+            smokeTest(tankTest, settings);
+
+            VehicleConstraintTest vcTest = new VehicleConstraintTest();
+            vcTest.sSceneName = scene;
+            smokeTest(vcTest, settings);
+
+            VehicleSixDOFTest vsdTest = new VehicleSixDOFTest();
+            vsdTest.sSceneName = scene;
+            smokeTest(vsdTest, settings);
+
+            VehicleStressTest vsTest = new VehicleStressTest();
+            vsTest.sSceneName = scene;
+            smokeTest(vsTest, settings);
+        }
     }
 }
