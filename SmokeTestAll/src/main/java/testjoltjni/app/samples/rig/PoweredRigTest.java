@@ -43,7 +43,7 @@ SkeletalAnimationRef mAnimation=new SkeletalAnimationRef();
 SkeletonPose mPrevPose=new SkeletonPose();
 SkeletonPose mPose=new SkeletonPose();
 
-final String sAnimations[] =
+public static String sAnimations[] =
 {
 	"neutral",
 	"walk",
@@ -54,7 +54,7 @@ final String sAnimations[] =
 	"dead_pose4"
 };
 
-String sAnimationName = "sprint";
+public String sAnimationName = "sprint";
 
 public void Cleanup()
 {

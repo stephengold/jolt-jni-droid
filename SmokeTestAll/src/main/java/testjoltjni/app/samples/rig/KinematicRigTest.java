@@ -38,7 +38,7 @@ RagdollRef mRagdoll=new RagdollRef();
 SkeletalAnimationRef mAnimation=new SkeletalAnimationRef();
 SkeletonPose mPose=new SkeletonPose();
 
-final String sAnimations[] =
+public static String sAnimations[] =
 {
 	"neutral",
 	"walk",
@@ -49,7 +49,7 @@ final String sAnimations[] =
 	"dead_pose4"
 };
 
-String sAnimationName = "walk";
+public String sAnimationName = "walk";
 
 public void Cleanup()
 {

@@ -38,7 +38,7 @@ import static com.github.stephengold.joltjni.std.Std.*;
  */
 public class RigPileTest extends Test{
 
-final String sScenes[] =
+public static String sScenes[] =
 {
 	"PerlinMesh",
 	"PerlinHeightField",
@@ -46,7 +46,7 @@ final String sScenes[] =
 	"terrain2",
 };
 
-String sSceneName=buildType().equals("Debug")?"PerlinMesh":"terrain1";
+public String sSceneName=buildType().equals("Debug")?"PerlinMesh":"terrain1";
 int sPileSize=buildType().equals("Debug")?5:10;
 int sNumPilesPerAxis= buildType().equals("Debug")?2:4;
 List<RagdollRef>mRagdolls=new ArrayList<>();

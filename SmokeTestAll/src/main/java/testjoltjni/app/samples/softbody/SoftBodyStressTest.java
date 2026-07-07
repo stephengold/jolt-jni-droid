@@ -33,13 +33,13 @@ import static com.github.stephengold.joltjni.std.Std.*;
  */
 public class SoftBodyStressTest extends Test{
 
-String  sScenes[] =
+public static String  sScenes[] =
 {
 	"SpheresVsBoxes",
 	"LargeCloth"
 };
 
-String  sSceneName = "SpheresVsBoxes";
+public String  sSceneName = "SpheresVsBoxes";
 
 public void Initialize()
 {
