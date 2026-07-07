@@ -402,9 +402,9 @@ void OnContactAdded( ConstCharacterVirtual inCharacter,  ConstCharacterContact i
 
 	if (inCharacter.getId() == mCharacter.getId())
 	{
-//	#ifdef CHARACTER_TRACE_CONTACTS
+	//#ifdef CHARACTER_TRACE_CONTACTS
 		Trace("Contact added with body %08x, sub shape %08x", inContact.getBodyB(), inContact.getSubShapeIdB());
-//	#endif
+	//#endif
 		if (mActiveContacts.find(  inContact) != -1)
 			FatalError("Got an add contact that should have been a persisted contact");
 		mActiveContacts.pushBack(inContact);
