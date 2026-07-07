@@ -214,6 +214,7 @@ final public class SmokeTestAll implements Runnable {
             copyResourceToFile(R.raw.dead_pose3, "Assets/Human/dead_pose3.tof");
             copyResourceToFile(R.raw.dead_pose4, "Assets/Human/dead_pose4.tof");
             copyResourceToFile(R.raw.face, "Assets/face.bin");
+            copyResourceToFile(R.raw.heightfield1, "Assets/heightfield1.bin");
             copyResourceToFile(R.raw.human, "Assets/Human.tof");
             copyResourceToFile(R.raw.jog_hd, "Assets/Human/jog_hd.tof");
             copyResourceToFile(R.raw.neutral, "Assets/Human/neutral.tof");
@@ -221,6 +222,8 @@ final public class SmokeTestAll implements Runnable {
             copyResourceToFile(R.raw.skeleton_hd, "Assets/Human/skeleton_hd.tof");
             copyResourceToFile(R.raw.snapshot, "snapshot.bin");
             copyResourceToFile(R.raw.sprint, "Assets/Human/sprint.tof");
+            copyResourceToFile(R.raw.terrain1, "Assets/terrain1.bof");
+            copyResourceToFile(R.raw.terrain2, "Assets/terrain2.bof");
             copyResourceToFile(R.raw.walk, "Assets/Human/walk.tof");
             copyResourceToFile(R.raw.wstraight, "Assets/wStraight.hair");
 
