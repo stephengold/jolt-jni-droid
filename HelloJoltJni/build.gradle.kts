@@ -24,7 +24,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig {
         applicationId = "com.github.stephengold.joltjni.droid"
         minSdk = 33 // in order to use Jolt JNI
