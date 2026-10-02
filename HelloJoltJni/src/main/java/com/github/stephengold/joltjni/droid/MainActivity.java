@@ -91,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
         if (buffer == null) { // for the original activity only!
             buffer = new StringBuffer();
             Context context = mainView.getContext();
-            HelloJoltJni hjj = new HelloJoltJni(context);
-            Thread testThread = new Thread(hjj, "HelloJoltJni");
+            HelloJoltJni hello = new HelloJoltJni(context);
+            Thread testThread = new Thread(hello, "HelloJoltJni");
             testThread.start();
         }
 
