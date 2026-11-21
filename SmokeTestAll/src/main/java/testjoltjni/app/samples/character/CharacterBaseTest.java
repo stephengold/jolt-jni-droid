@@ -530,7 +530,7 @@ public void Initialize()
 
 		// Create a half cylinder with caps for testing contact point limit
 		{
-			List<ConstFloat3> vertices=new ArrayList<>();
+			VertexList vertices=new VertexList();
 			IndexedTriangleList triangles=new IndexedTriangleList();
 
 			// The half cylinder
@@ -549,7 +549,7 @@ public void Initialize()
 					float x = cCylinderLength * (-0.5f + (float)(pos) / (cPosSegments - 1));
 					float y = angle == 0 || angle == cAngleSegments - 1? 0.5f : (1.0f - c) * radius;
 					float z = s * radius;
-					vertices.add(new Float3(x, y, z));
+					vertices.pushBack(x, y, z);
 
 					if (pos > 0 && angle > 0)
 					{
@@ -665,10 +665,10 @@ void CharacterBaseTest::ProcessInput(const ProcessInputParams &inParams)
 {
 	// Determine controller input
 	mControlInput = Vec3::sZero();
-	if (inParams.mKeyboard->IsKeyPressed(DIK_LEFT))		mControlInput.SetZ(-1);
-	if (inParams.mKeyboard->IsKeyPressed(DIK_RIGHT))	mControlInput.SetZ(1);
-	if (inParams.mKeyboard->IsKeyPressed(DIK_UP))		mControlInput.SetX(1);
-	if (inParams.mKeyboard->IsKeyPressed(DIK_DOWN))		mControlInput.SetX(-1);
+	if (inParams.mKeyboard->IsKeyPressed(EKey::Left))	mControlInput.SetZ(-1);
+	if (inParams.mKeyboard->IsKeyPressed(EKey::Right))	mControlInput.SetZ(1);
+	if (inParams.mKeyboard->IsKeyPressed(EKey::Up))		mControlInput.SetX(1);
+	if (inParams.mKeyboard->IsKeyPressed(EKey::Down))	mControlInput.SetX(-1);
 	if (mControlInput != Vec3::sZero())
 		mControlInput = mControlInput.Normalized();
 
@@ -680,8 +680,8 @@ void CharacterBaseTest::ProcessInput(const ProcessInputParams &inParams)
 	mControlInput = rotation * mControlInput;
 
 	// Check actions
-	mJump = inParams.mKeyboard->IsKeyPressedAndTriggered(DIK_RCONTROL, mWasJump);
-	mSwitchStance = inParams.mKeyboard->IsKeyPressedAndTriggered(DIK_RSHIFT, mWasSwitchStance);
+	mJump = inParams.mKeyboard->IsKeyPressedAndTriggered(EKey::RControl, mWasJump);
+	mSwitchStance = inParams.mKeyboard->IsKeyPressedAndTriggered(EKey::RShift, mWasSwitchStance);
 }
 */
 
@@ -885,31 +885,31 @@ void DrawPaddedCharacter(ConstShape inShape, float inPadding, RMat44Arg inCenter
 {
 	if (inShape.getSubType() == EShapeSubType.Capsule)
 	{
-		 CapsuleShape capsule = ( CapsuleShape )(inShape);
+		final CapsuleShape capsule = ( CapsuleShape )(inShape);
 		mDebugRenderer.drawCapsule(inCenterOfMass, capsule.getHalfHeightOfCylinder(), capsule.getRadius() + inPadding, Color.sGrey, ECastShadow.Off, EDrawMode.Wireframe);
 	}
 	else if (inShape.getSubType() == EShapeSubType.Cylinder)
 	{
 		// Not correct as the edges should be rounded
-		 CylinderShape cylinder = ( CylinderShape )(inShape);
+		final CylinderShape cylinder = ( CylinderShape )(inShape);
 		mDebugRenderer.drawCylinder(inCenterOfMass, cylinder.getHalfHeight() + inPadding, cylinder.getRadius() + inPadding, Color.sGrey, ECastShadow.Off, EDrawMode.Wireframe);
 	}
 	else if (inShape.getSubType() == EShapeSubType.Box)
 	{
 		// Not correct as the edges should be rounded
-		 BoxShape box = ( BoxShape )(inShape);
+		final BoxShape box = ( BoxShape )(inShape);
 		AaBox bounds = box.getLocalBounds();
 		bounds.expandBy(Vec3.sReplicate(inPadding));
 		mDebugRenderer.drawWireBox(inCenterOfMass, bounds, Color.sGrey);
 	}
 	else if (inShape.getSubType() == EShapeSubType.RotatedTranslated)
 	{
-		 RotatedTranslatedShape rt = ( RotatedTranslatedShape )(inShape);
+		final RotatedTranslatedShape rt = ( RotatedTranslatedShape )(inShape);
 		DrawPaddedCharacter(rt.getInnerShape(), inPadding, inCenterOfMass);
 	}
 	else if (inShape.getType() == EShapeType.Compound)
 	{
-		 CompoundShape compound = ( CompoundShape )(inShape);
+		final CompoundShape compound = ( CompoundShape )(inShape);
 		for (ConstSubShape  sub_shape : compound.getSubShapes())
 			DrawPaddedCharacter(sub_shape.getShape(), inPadding, star(inCenterOfMass , sub_shape.getLocalTransformNoScale(Vec3.sOne())));
 	}
