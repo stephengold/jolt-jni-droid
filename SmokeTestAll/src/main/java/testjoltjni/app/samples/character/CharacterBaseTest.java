@@ -424,7 +424,7 @@ public void Initialize()
 
 		// Create stairs from triangles
 		{
-			List<Triangle> triangles=new ArrayList<>();
+			TriangleList triangles=new TriangleList();
 
 			float rear_z = 10 * cStairsStepHeight;
 
@@ -444,17 +444,17 @@ public void Initialize()
 				Vec3 s2 = plus(s1 , width);
 				Vec3 p2 = plus(p1 , width);
 
-				triangles.add(new Triangle(s1, b1, s2));
-				triangles.add(new Triangle(b1, b2, s2));
-				triangles.add(new Triangle(s1, p2, p1));
-				triangles.add(new Triangle(s1, s2, p2));
+				triangles.pushBack(new Triangle(s1, b1, s2));
+				triangles.pushBack(new Triangle(b1, b2, s2));
+				triangles.pushBack(new Triangle(s1, p2, p1));
+				triangles.pushBack(new Triangle(s1, s2, p2));
 
 				// Side of stairs
 				Vec3 rb2 = b2; rb2.setZ(rear_z);
 				Vec3 rs2 = s2; rs2.setZ(rear_z);
 
-				triangles.add(new Triangle(s2, b2, rs2));
-				triangles.add(new Triangle(rs2, b2, rb2));
+				triangles.pushBack(new Triangle(s2, b2, rs2));
+				triangles.pushBack(new Triangle(rs2, b2, rb2));
 			}
 
 			MeshShapeSettings mesh=new MeshShapeSettings(triangles);
@@ -478,7 +478,7 @@ public void Initialize()
 
 		// Create stairs with too little space between the steps consisting of triangles
 		{
-			List<Triangle> triangles=new ArrayList<>(40);
+			TriangleList triangles=new TriangleList();
 
 			for (int i = 0; i < 10; ++i)
 			{
@@ -496,10 +496,10 @@ public void Initialize()
 				Vec3 s2 = plus(s1 , width);
 				Vec3 p2 = plus(p1 , width);
 
-				triangles.add(new Triangle(s1, s2, b1));
-				triangles.add(new Triangle(b1, s2, b2));
-				triangles.add(new Triangle(s1, p1, p2));
-				triangles.add(new Triangle(s1, p2, s2));
+				triangles.pushBack(new Triangle(s1, s2, b1));
+				triangles.pushBack(new Triangle(b1, s2, b2));
+				triangles.pushBack(new Triangle(s1, p1, p2));
+				triangles.pushBack(new Triangle(s1, p2, s2));
 			}
 
 			MeshShapeSettings mesh=new MeshShapeSettings(triangles);
@@ -510,15 +510,15 @@ public void Initialize()
 
 		// Create mesh with walls at varying angles
 		{
-			List<Triangle> triangles=new ArrayList<>();
+			TriangleList triangles=new TriangleList();
 			Vec3 p1=new Vec3(0.5f * cMeshWallWidth, 0, 0);
 			Vec3 h=new Vec3(0, cMeshWallHeight, 0);
 			for (int i = 0; i < cMeshWallSegments; ++i)
 			{
 				float delta = cMeshWallStepStart + i * (cMeshWallStepEnd - cMeshWallStepStart) / (cMeshWallSegments - 1);
 				Vec3 p2 =new Vec3(((i & 1) != 0x0)? 0.5f * cMeshWallWidth : -0.5f * cMeshWallWidth, 0, p1.getZ() + delta);
-				triangles.add(new Triangle(p1, plus(p1 , h), plus(p2 , h)));
-				triangles.add(new Triangle(p1, plus(p2 , h), p2));
+				triangles.pushBack(new Triangle(p1, plus(p1 , h), plus(p2 , h)));
+				triangles.pushBack(new Triangle(p1, plus(p2 , h), p2));
 				p1 = p2;
 			}
 

@@ -172,7 +172,7 @@ if(buildType().equals("DEBUG")){
 			heights[x][z] = max_height * perlinNoise3((float)(x) * 8.0f / n, 0, (float)(z) * 8.0f / n, 256, 256, 256);
 
 	// Create regular grid of triangles
-	List<Triangle> triangles=new ArrayList<>(2*n*n);
+	TriangleList triangles=new TriangleList();
 	for (int x = 0; x < n; ++x)
 		for (int z = 0; z < n; ++z)
 		{
@@ -188,8 +188,8 @@ if(buildType().equals("DEBUG")){
 			Float3 v3 =new Float3(x1, heights[x][z + 1], z2);
 			Float3 v4 =new Float3(x2, heights[x + 1][z + 1], z2);
 
-			triangles.add(new Triangle(v1, v3, v4));
-			triangles.add(new Triangle(v1, v4, v2));
+			triangles.pushBack(new Triangle(v1, v3, v4));
+			triangles.pushBack(new Triangle(v1, v4, v2));
 		}
 
 	// Floor
