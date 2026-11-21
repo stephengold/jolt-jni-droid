@@ -23,8 +23,18 @@ R5="$GitDir/LbjDroid/HelloLibbulletjme/src/main/java/com/github/stephengold/lbjd
 L6="$GitDir/jolt-jni-droid/SmokeTestAll/src/main"
 R6="$GitDir/jolt-jni/src/test"
 
+L7="$GitDir/jolt-jni-droid/SmokeTestAll/src/main/java/com/github/stephengold/joltjni/droidsta/SmokeTestAll.java"
+R7="$GitDir/jolt-jni/src/test/java/testjoltjni/app/samples/SmokeTestAll.java"
+
+L8="$GitDir/jolt-jni-droid/SmokeTestAll/src/main/res/raw"
+R8="$GitDir/jolt-jni/Assets/Human"
+
+L9="$GitDir/jolt-jni-droid/SmokeTestAll/src/main/res/raw"
+R9="$GitDir/jolt-jni"
+
 Meld="/usr/bin/meld"
 #Meld="/c/Program Files/Meld/meld"
 
 "$Meld" --diff "$L1" "$R1" --diff "$L2" "$R2" --diff "$L3" "$R3" \
-        --diff "$L4" "$R4" --diff "$L5" "$R5" --diff "$L6" "$R6"
+        --diff "$L4" "$R4" --diff "$L5" "$R5" --diff "$L6" "$R6" \
+        --diff "$L7" "$R7" --diff "$L8" "$R8" --diff "$L9" "$R9"
