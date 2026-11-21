@@ -658,9 +658,6 @@ final public class SmokeTestAll implements Runnable {
         smokeTest(new LoadSaveRigTest());
 
         for (String animation : PoweredRigTest.sAnimations) {
-            if (animation.equals("dead_pose3")) {
-                continue; // issue #2059
-            }
             String settings = "animation=" + animation;
 
             PoweredRigTest test = new PoweredRigTest();
