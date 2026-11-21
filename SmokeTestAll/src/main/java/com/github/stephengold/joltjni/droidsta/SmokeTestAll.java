@@ -151,12 +151,6 @@ final public class SmokeTestAll implements Runnable {
 
         // Log the configuration:
         println(Jolt.getConfigurationString());
-        printf(" built-in compute systems:%s%s%s%s%n",
-                Jolt.implementsComputeCpu() ? " CPU" : "",
-                Jolt.implementsComputeDx12() ? " DX12" : "",
-                Jolt.implementsComputeMtl() ? " Metal" : "",
-                Jolt.implementsComputeVk() ? " Vulkan" : ""
-        );
 
         createSharedObjects();
         createFiles();
