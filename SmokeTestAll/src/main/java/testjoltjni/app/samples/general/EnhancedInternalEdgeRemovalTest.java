@@ -177,6 +177,7 @@ public void Initialize()
 		BodyCreationSettings slope_plane=new BodyCreationSettings(plane_mesh, new RVec3(10, 0, 50), Quat.sRotation(Vec3.sAxisX(), degreesToRadians(45)), EMotionType.Static, Layers.NON_MOVING);
 		slope_plane.setFriction ( 1);
 		mBodyInterface.createAndAddBody(slope_plane, EActivation.DontActivate);
+		SetBodyLabel(id, "Dense triangle mesh");
 
 		// Roll a ball over it
 		BodyCreationSettings slope_ball=new BodyCreationSettings(new SphereShape(0.5f), new RVec3(10, 8, 44), Quat.sIdentity(), EMotionType.Dynamic, Layers.MOVING);
